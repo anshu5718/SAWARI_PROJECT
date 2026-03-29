@@ -181,7 +181,7 @@ STATIC_ROOT = ROOT_DIR / "staticfiles"
 LOGIN_URL = '/login/' 
 
 
-KHALTI_SECRET_KEY = "48254c6a95b24b219e015304e38af23c"
+KHALTI_SECRET_KEY = "c150577440834b12b5d2288590b8b8fa"
 
 # 1. Allow the frontend to read the cookie
 CSRF_COOKIE_HTTPONLY = False 

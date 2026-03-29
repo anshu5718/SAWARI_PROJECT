@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from reservation.payment_utils import initiate_khalti_payment, verify_khalti_payment
 from reservation.serializers import RejectionSchema, ReservationStatusUpdate
-from reservation.utils import send_rejection_emails, send_status_update_email
+from reservation.utils import send_rejection_emails, send_status_update_email, booking_notification_mail
 from .models import Reservation, Payment
 from sawari.ninja_api import api
 from ninja import Schema
@@ -45,6 +45,7 @@ def payment_success_api(request, pidx: str):
     
     if status == "Completed":
         payment.status = "completed"
+        payment.is_paid = True
         payment.save()
         reservation = payment.reservation
         reservation.status = "completed"
@@ -113,6 +114,7 @@ def book_vehicle_api(request, payload: BookingSchema):
         purpose=payload.purpose,
         status='pending',
     )
+    booking_notification_mail(vehicle.owner.email, vehicle.vehicle_type, f"{payload.start_date} to {payload.end_date}", reservation.amount)
     return {"success": True, "reservation_id": reservation.id}
 
 

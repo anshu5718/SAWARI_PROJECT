@@ -41,13 +41,12 @@ function App() {
       <Routes>
         {/* Home — no Layout */}
         <Route path="/" element={<Home />} />
-
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/otp-confirmation" element={<OtpConfirmation />} />
+        <Route path="/set-new-password" element={<SetNewPassword />} />
         {/* All other routes — wrapped in Layout */}
-        <Route path="/login" element={<Layout user={user}><Login /></Layout>} />
-        <Route path="/signup" element={<Layout user={user}><Signup /></Layout>} />
-        <Route path="/forgot-password" element={<Layout user={user}><ForgotPassword /></Layout>} />
-        <Route path="/otp-confirmation" element={<Layout user={user}><OtpConfirmation /></Layout>} />
-        <Route path="/set-new-password" element={<Layout user={user}><SetNewPassword /></Layout>} />
         <Route path="/viewer-homepage" element={<Layout user={user}><ViewerHomePage /></Layout>} />
         <Route path="/booking-cancel" element={<Layout user={user}><BookingCancel /></Layout>} />
         <Route path="/register-vehicle" element={<Layout user={user}><RegisterVehicle /></Layout>} />

@@ -151,11 +151,12 @@ function UserBookings() {
                 </p>
               </div>
 
-              {/* Status badges */}
+              {/* Status & Payment Badges */}
               <div className="flex items-center gap-2 shrink-0 flex-wrap">
                 <StatusBadge status={r.status} />
 
-                {r.payment_status === 'completed' ? (
+                {/* Check if payment is successful via either field */}
+                {(r.payment_status === 'completed' || r.is_paid === true) ? (
                   <span
                     className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium"
                     style={{ background: '#0a1400', border: '1px solid #2a4a1a', color: '#8bc34a' }}

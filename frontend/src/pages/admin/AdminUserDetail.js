@@ -104,8 +104,6 @@ function AdminUserDetail() {
           {[
             { label: 'User ID',     value: `#${user.id}` },
             { label: 'Username',    value: user.username },
-            { label: 'First name',  value: user.first_name || '—' },
-            { label: 'Last name',   value: user.last_name || '—' },
             { label: 'Email',       value: user.email },
             { label: 'User type',   value: user.user_type },
             { label: 'Status',      value: user.is_active ? 'Active' : 'Inactive' },

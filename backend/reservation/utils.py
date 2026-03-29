@@ -48,3 +48,8 @@ def send_status_update_email(reservation, action):
         subject = 'Reservation Completed'
         body = f'Your reservation of {vehicle.vehicle_type} from {reservation.start_date} to {reservation.end_date} has been completed. Thank you!'
         send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, [reservation.user.email])
+
+def booking_notification_mail(user_email, vehicle_info, dates, amount):
+    subject = 'New Booking'
+    message = f'You have a new booking for {vehicle_info} from {dates}. Amount: Rs. {amount}'
+    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user_email])

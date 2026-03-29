@@ -178,20 +178,6 @@ const Layout = ({ children, user }) => {
       <main className="flex-1 w-full ">
         {children}
       </main>
-
-      {/* Footer */}
-      <footer className="border-t border-[#1e1e1e] mt-auto">
-        <div className="flex items-center justify-between px-8 py-5 max-w-7xl mx-auto">
-          <img src="/img/sawari_white.png" alt="Sawari" className="h-5 w-auto opacity-30" />
-          <div className="flex items-center gap-6">
-            <Link to="/about" className="text-xs text-[#444] hover:text-[#888] transition-colors no-underline">About</Link>
-            <Link to="/privacy" className="text-xs text-[#444] hover:text-[#888] transition-colors no-underline">Privacy</Link>
-            <Link to="/terms" className="text-xs text-[#444] hover:text-[#888] transition-colors no-underline">Terms</Link>
-            <Link to="/support" className="text-xs text-[#444] hover:text-[#888] transition-colors no-underline">Support</Link>
-          </div>
-          <span className="text-xs text-[#333]">© {new Date().getFullYear()} Sawari</span>
-        </div>
-      </footer>
     </div>
   );
 };
