@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-)g4^wa)2^=p!i2&6^3dvas9u&w%d^5z8m^2i-w@(fb_2_jd)0l
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['nisha.pythonanywhere.com']
 
 
 # Application definition
@@ -190,6 +190,7 @@ SESSION_COOKIE_SAMESITE = 'Lax'
 
 # 2. Trust your frontend
 CSRF_TRUSTED_ORIGINS = [
+    "https://nisha.pythonanywhere.com",
     'http://localhost:3000', 
     'http://127.0.0.1:3000',
     'http://localhost:3001',
@@ -197,6 +198,7 @@ CSRF_TRUSTED_ORIGINS = [
 # 3. If using django-cors-headers, ensure this is set:
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
+    "https://nisha.pythonanywhere.com",
     "http://localhost:3000",
     'http://localhost:3001',
 ]

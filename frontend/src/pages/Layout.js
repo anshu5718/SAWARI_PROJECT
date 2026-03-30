@@ -37,7 +37,7 @@ const Navbar = ({ user }) => {
     setOpen(false);
     localStorage.removeItem('user');
     try {
-      await fetch('http://localhost:8000/api/logout/', {
+      await fetch('https://nisha.pythonanywhere.com/api/logout/', {
         method: 'POST',
         credentials: 'include',
         headers: { 'X-CSRFToken': document.cookie.match(/csrftoken=([^;]+)/)?.[1] || '' },

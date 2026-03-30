@@ -55,7 +55,7 @@ function EditVehicle() {
 
     try {
         // Step 1 — update text fields via JSON
-        const response = await fetch(`http://localhost:8000/api/edit-vehicle/${id}/`, {
+        const response = await fetch(`https://nisha.pythonanywhere.com/api/edit-vehicle/${id}/`, {
         method: 'PATCH',
         credentials: 'include',
         headers: {
@@ -84,7 +84,7 @@ function EditVehicle() {
             for (let pair of form.entries()) {  // add this
                 console.log(pair[0], pair[1]);    // add this
             }
-            const imgResponse = await fetch(`http://localhost:8000/api/edit-vehicle-image/${id}/`, {
+            const imgResponse = await fetch(`https://nisha.pythonanywhere.com/api/edit-vehicle-image/${id}/`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'X-CSRFToken': getCookie('csrftoken') },
