@@ -17,11 +17,6 @@ ENV/
 dist/
 build/
 
-# Django stuff
-*.sqlite3
-media/
-staticfiles/
-db.sqlite3
 
 # migrations (optional if you want clean deploys)
 # */migrations/*
