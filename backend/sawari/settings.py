@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
+
 import os
 from pathlib import Path
 
@@ -20,84 +21,87 @@ ROOT_DIR = BASE_DIR.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-)g4^wa)2^=p!i2&6^3dvas9u&w%d^5z8m^2i-w@(fb_2_jd)0l'
+SECRET_KEY = "django-insecure-)g4^wa)2^=p!i2&6^3dvas9u&w%d^5z8m^2i-w@(fb_2_jd)0l"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['nisha.pythonanywhere.com']
-
+ALLOWED_HOSTS = [
+    "bisaka.pythonanywhere.com",
+    "nisha.pythonanywhere.com",
+    "127.0.0.1",
+    "localhost",
+]
 
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'rest_framework',
-    'corsheaders',
-    'user_acc',
-    'tailwind',
-    'background_task',
-    'vehicles',
-    'reservation',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "rest_framework",
+    "corsheaders",
+    "user_acc",
+    "tailwind",
+    "background_task",
+    "vehicles",
+    "reservation",
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = 'sawari.urls'
+ROOT_URLCONF = "sawari.urls"
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
     ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
-    ]
-
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.AllowAny",
+    ],
 }
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [ROOT_DIR / 'frontend/build'],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [ROOT_DIR / "frontend/build"],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
-STATICFILES_DIRS = [ROOT_DIR / 'frontend/build/static']
+STATICFILES_DIRS = [ROOT_DIR / "frontend/build/static"]
 
 
-WSGI_APPLICATION = 'sawari.wsgi.application'
+WSGI_APPLICATION = "sawari.wsgi.application"
 
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': ROOT_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": ROOT_DIR / "db.sqlite3",
     }
 }
 
@@ -107,16 +111,16 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -124,9 +128,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = 'Asia/Kathmandu'
+TIME_ZONE = "Asia/Kathmandu"
 
 USE_I18N = True
 
@@ -140,36 +144,33 @@ USE_TZ = True
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # For Windows - make sure this path is correct
 NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
 
 
-AUTH_USER_MODEL = 'user_acc.User_profile'
+AUTH_USER_MODEL = "user_acc.User_profile"
 
 
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 # EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-EMAIL_HOST = 'smtp.gmail.com' # MailHog's SMTP server is usually hosted on localhost
-EMAIL_PORT = 587 # MailHog's default SMTP port
-EMAIL_USE_TLS = True # MailHog doesn't use TLS by default
-EMAIL_HOST_USER = 'shrestha.bisaka18@gmail.com' # No authentication needed for MailHog
-EMAIL_HOST_PASSWORD = 'xixq jmwk zndt hnis' # No password required
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER # Default sender email
+EMAIL_HOST = "smtp.gmail.com"  # MailHog's SMTP server is usually hosted on localhost
+EMAIL_PORT = 587  # MailHog's default SMTP port
+EMAIL_USE_TLS = True  # MailHog doesn't use TLS by default
+EMAIL_HOST_USER = "shrestha.bisaka18@gmail.com"  # No authentication needed for MailHog
+EMAIL_HOST_PASSWORD = "xixq jmwk zndt hnis"  # No password required
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Default sender email
 
 MAX_ATTEMPTS = 3
 
 
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = ROOT_DIR / 'media'
-
+MEDIA_URL = "/media/"
+MEDIA_ROOT = ROOT_DIR / "media"
 
 
-STATIC_URL = '/static/'
+STATIC_URL = "/static/"
 
 # During development
 # STATICFILES_DIRS = [BASE_DIR / "frontend/build/static "]
@@ -178,29 +179,29 @@ STATIC_URL = '/static/'
 STATIC_ROOT = ROOT_DIR / "staticfiles"
 
 
-LOGIN_URL = '/login/' 
+LOGIN_URL = "/login/"
 
 
 KHALTI_SECRET_KEY = "c150577440834b12b5d2288590b8b8fa"
 
 # 1. Allow the frontend to read the cookie
-CSRF_COOKIE_HTTPONLY = False 
-CSRF_COOKIE_SAMESITE = 'Lax'
-SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_SAMESITE = "None"
+SESSION_COOKIE_SAMESITE = "None"
 
 # 2. Trust your frontend
 CSRF_TRUSTED_ORIGINS = [
-    "https://nisha.pythonanywhere.com",
-    'http://localhost:3000', 
-    'http://127.0.0.1:3000',
-    'http://localhost:3001',
+    "https://bisaka.pythonanywhere.com",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:3001",
 ]
 # 3. If using django-cors-headers, ensure this is set:
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
-    "https://nisha.pythonanywhere.com",
+    "https://bisaka.pythonanywhere.com",
     "http://localhost:3000",
-    'http://localhost:3001',
+    "http://localhost:3001",
 ]
 CSRF_COOKIE_SECURE = True  # Keep False for localhost development
 SESSION_COOKIE_SECURE = True
@@ -210,13 +211,12 @@ CORS_ALLOW_HEADERS = [
     "authorization",
     "content-type",
     "user-agent",
-    "x-csrftoken", # <--- IMPORTANT: Allow the header you are sending
+    "x-csrftoken",  # <--- IMPORTANT: Allow the header you are sending
     "x-requested-with",
 ]
 
-CORS_URLS_REGEX = r'^.*$'
+CORS_URLS_REGEX = r"^.*$"
 
 
-
-CSRF_COOKIE_PATH = '/'
-SESSION_COOKIE_PATH = '/'
+CSRF_COOKIE_PATH = "/"
+SESSION_COOKIE_PATH = "/"

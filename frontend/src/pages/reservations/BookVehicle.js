@@ -21,7 +21,7 @@ function BookVehicle() {
   });
 
   useEffect(() => {
-    fetch(`http://nisha.pythonanywhere.com/api/viewer-homepage/`, { credentials: 'include' })
+    fetch(`https://bisaka.pythonanywhere.com/api/viewer-homepage/`, { credentials: 'include' })
       .then(res => res.json())
       .then(json => {
         const found = (json.vehicles || []).find(v => String(v.id) === String(id));
@@ -67,7 +67,7 @@ function BookVehicle() {
 
     setSubmitting(true);
     try {
-      const response = await fetch('http://nisha.pythonanywhere.com/api/book-vehicle/', {
+      const response = await fetch('https://bisaka.pythonanywhere.com/api/book-vehicle/', {
         method: 'POST',
         credentials: 'include',
         headers: {

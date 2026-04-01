@@ -42,7 +42,7 @@ function SetNewPassword() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://nisha.pythonanywhere.com/api/set-new-password/', {
+      const response = await fetch('https://bisaka.pythonanywhere.com/api/set-new-password/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

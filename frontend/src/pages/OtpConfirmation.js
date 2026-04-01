@@ -54,7 +54,7 @@ function OtpConfirmation() {
     const otpString = otp.join('');
 
     try {
-      const response = await fetch('http://nisha.pythonanywhere.com/api/otp-confirmation/', {
+      const response = await fetch('https://bisaka.pythonanywhere.com/api/otp-confirmation/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

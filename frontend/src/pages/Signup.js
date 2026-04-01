@@ -36,7 +36,7 @@ function Signup() {
     const csrfToken = getCookie('csrftoken');
 
     try {
-      const response = await fetch('http://nisha.pythonanywhere.com/api/signup/', {
+      const response = await fetch('https://bisaka.pythonanywhere.com/api/signup/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
