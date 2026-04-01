@@ -65,7 +65,7 @@ function RegisterVehicle() {
     data.append('vehicle_image', image);
 
     try {
-      const response = await fetch('https://nisha.pythonanywhere.com/api/register-vehicle/', {
+      const response = await fetch('http://nisha.pythonanywhere.com/api/register-vehicle/', {
         method: 'POST',
         body: data,
         credentials: 'include',

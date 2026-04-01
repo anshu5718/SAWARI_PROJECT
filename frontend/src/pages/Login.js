@@ -24,7 +24,7 @@ function Login() {
     const csrfToken = getCookie('csrftoken');
 
     try {
-      const response = await fetch('https://nisha.pythonanywhere.com/api/login/', {
+      const response = await fetch('http://nisha.pythonanywhere.com/api/login/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

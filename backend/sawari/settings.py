@@ -202,8 +202,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     'http://localhost:3001',
 ]
-CSRF_COOKIE_SECURE = False  # Keep False for localhost development
-SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = True  # Keep False for localhost development
+SESSION_COOKIE_SECURE = True
 
 CORS_ALLOW_HEADERS = [
     "accept",

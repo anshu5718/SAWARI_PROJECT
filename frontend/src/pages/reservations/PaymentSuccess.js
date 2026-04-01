@@ -9,7 +9,7 @@ function PaymentSuccess() {
   useEffect(() => {
     const pidx = searchParams.get('pidx');
 
-    fetch(`https://nisha.pythonanywhere.com/api/payment-success/?pidx=${pidx}`, {
+    fetch(`http://nisha.pythonanywhere.com/api/payment-success/?pidx=${pidx}`, {
       credentials: 'include',
     })
       .then((res) => res.json())
