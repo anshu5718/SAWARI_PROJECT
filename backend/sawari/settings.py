@@ -89,8 +89,11 @@ TEMPLATES = [
     },
 ]
 
-STATICFILES_DIRS = [ROOT_DIR / "frontend/build/static"]
+STATICFILES_DIRS = [
+    ROOT_DIR / "frontend/build/static", 
+]
 
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
 WSGI_APPLICATION = "sawari.wsgi.application"
 
