@@ -19,7 +19,7 @@ function ViewerHomePage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('https://bisaka.pythonanywhere.com/api/viewer-homepage/', { credentials: 'include' })
+    fetch('https://nisha.pythonanywhere.com/api/viewer-homepage/', { credentials: 'include' })
       .then(res => res.json())
       .then(json => {
         console.log('Viewer data:', json);
