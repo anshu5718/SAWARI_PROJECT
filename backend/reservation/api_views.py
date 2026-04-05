@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect, JsonResponse
 from reservation.payment_utils import initiate_khalti_payment, verify_khalti_payment
-from reservation.serializers import RejectionSchema, ReservationStatusUpdate
+from reservation.schemas import RejectionSchema, ReservationSchema
 from reservation.utils import send_rejection_emails, send_status_update_email, booking_notification_mail
 from .models import Reservation, Payment
 from sawari.ninja_api import api
@@ -38,22 +38,31 @@ def create_payment_api(request, reservation_id: int):
 
 @api.get("/payment-success/")
 def payment_success_api(request, pidx: str):
-    payment = get_object_or_404(Payment, pidx=pidx, reservation__user=request.user)
-    response = verify_khalti_payment(payment.pidx)
+    """
+    Handles the redirect from Khalti, verifies the transaction,
+    updates the database, and redirects the user home.
+    """
+   
+    payment = get_object_or_404(Payment, pidx=pidx)
     
-    status = response.get("status") or response.get("transaction", {}).get("state")
+   
+    response = verify_khalti_payment(pidx)
     
-    if status == "Completed":
-        payment.status = "completed"
-        payment.is_paid = True
+    
+    
+    if response.get("status") == "Completed":
+        payment.status = "completed" 
         payment.save()
-        reservation = payment.reservation
-        reservation.status = "completed"
-        reservation.save()
-        return {"success": True, "message": "Payment verified"}
-    
-    return HttpResponse({"success": False, "message": "Payment not completed"}, status=400)
+        
+        res = payment.reservation
+        res.status = "completed"
+        res.is_paid = True
+        res.save()
+            
+        return {"success": True}
 
+   
+    return {"success": False}
 
 @api.post("/reject-booking/{reservation_id}/")
 def reject_booking_api(request, reservation_id: int, data: RejectionSchema):
@@ -89,7 +98,7 @@ def user_booking_api(request):
     return {"reservations": data}
 
 @api.post("/update-status/{reservation_id}/")
-def update_status_api(request, reservation_id: int, payload: ReservationStatusUpdate):
+def update_status_api(request, reservation_id: int, payload: ReservationSchema):
     data = payload.model_dump()
     action = data['action']
     
@@ -140,3 +149,4 @@ def driver_bookings_api(request):
         for r in reservations
     ]
     return data
+

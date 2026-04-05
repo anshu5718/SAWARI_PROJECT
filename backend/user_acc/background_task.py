@@ -7,5 +7,4 @@ def send_otp(email, otp):
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [email]
     
-    # Use fail_silently=False during development to see errors
     send_mail(subject, message, email_from, recipient_list, fail_silently=False)

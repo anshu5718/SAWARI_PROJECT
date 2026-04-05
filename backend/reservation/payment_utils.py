@@ -13,8 +13,8 @@ def initiate_khalti_payment(payment):
     unique_order_id = f"PAY_{payment.id}_{int(time.time())}"
 
     payload = {
-        "return_url": "https://nisha.pythonanywhere.com/payment-success",
-        "website_url": "https://nisha.pythonanywhere.com/",
+        "return_url": "http://localhost:3000/payment-success/",
+        "website_url": "http://localhost:8000/",
         "amount": paisa_amount,
         "purchase_order_id": unique_order_id,
         "purchase_order_name": "Vehicle Reservation",
