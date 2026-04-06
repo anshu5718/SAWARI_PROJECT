@@ -1,3 +1,138 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ── Theme Variables ─────────────────────────────────────────────── */
+[data-theme='dark'] {
+  --bg-primary: #0f0f0f;
+  --bg-secondary: #161616;
+  --bg-tertiary: #1e1e1e;
+  --border: #252525;
+  --border-hover: #333333;
+  --text-primary: #f0ede8;
+  --text-secondary: #999;
+  --text-muted: #555;
+  --accent: #e8c84a;
+  --accent-hover: #d4a800;
+  --error-bg: #1e0e0e;
+  --error-border: #3a1a1a;
+  --error-text: #e05a4a;
+    --status-active-bg: #0a1400;
+  --status-active-border: #2a4a1a;
+  --status-active-text: #8bc34a;
+  --status-pending-bg: #1a1400;
+  --status-pending-border: #3a2a00;
+  --status-pending-text: #e8c84a;
+}
+
+[data-theme='light'] {
+  --bg-primary: #edeae2;        /* warm parchment — not blank white */
+  --bg-secondary: #f7f4ee;      /* card surface — clearly lighter than bg */
+  --bg-tertiary: #e4e0d6;       /* slightly darker for sections/sidebars */
+  --border: #ccc8be;            /* visible borders */
+  --border-hover: #aaa69c;      /* stronger on hover */
+  --text-primary: #18160f;      /* warm near-black — crisp and readable */
+  --text-secondary: #4a4640;    /* readable secondary */
+  --text-muted: #7a756e;        /* muted but visible */
+  --accent: #c9a800;
+  --accent-hover: #b89200;
+  --error-bg: #fff0f0;
+  --error-border: #ffcccc;
+  --error-text: #cc0000;
+
+  /* ...existing vars... */
+  --status-active-bg: #eef6e8;
+  --status-active-border: #c5e0a8;
+  --status-active-text: #33691e;
+  --status-pending-bg: #fdf8e1;
+  --status-pending-border: #e8d88a;
+  --status-pending-text: #856a00;
+}
+
+/* ── Base ────────────────────────────────────────────────────────── */
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background 0.2s, color 0.2s;
+}
+
+/* ── Tailwind Utility Classes for Theme ──────────────────────────── */
+@layer utilities {
+  .bg-theme-primary   { background: var(--bg-primary); }
+  .bg-theme-secondary { background: var(--bg-secondary); }
+  .bg-theme-tertiary  { background: var(--bg-tertiary); }
+
+  .border-theme       { border-color: var(--border); }
+  .border-theme-hover { border-color: var(--border-hover); }
+
+  .text-theme-primary   { color: var(--text-primary); }
+  .text-theme-secondary { color: var(--text-secondary); }
+  .text-theme-muted     { color: var(--text-muted); }
+
+  .accent    { color: var(--accent); }
+  .bg-accent { background: var(--accent); }
+
+  .bg-error     { background: var(--error-bg); }
+  .border-error { border-color: var(--error-border); }
+  .text-error   { color: var(--error-text); }
+
+  .input-theme {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-hover);
+    color: var(--text-primary);
+    border-radius: 0.5rem;
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+  .input-theme:focus { border-color: var(--accent); }
+
+  .card-theme {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+  }
+
+  /* Cards get a shadow in light mode so they lift off the background */
+  [data-theme='light'] .card-theme {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.09);
+  }
+
+  .btn-accent {
+    background: var(--accent);
+    color: #000;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    padding: 0.625rem 1rem;
+    transition: opacity 0.2s;
+  }
+  .btn-accent:hover    { opacity: 0.9; }
+  .btn-accent:disabled { opacity: 0.5; }
+}
+
+/* ── Status Badges ───────────────────────────────────────────────── */
+@layer utilities {
+  [data-theme='light'] .status-badge-completed {
+    background: #f0f9f0;
+    border-color: #cce8cc;
+    color: #2b5e2b;
+  }
+  [data-theme='light'] .status-badge-pending {
+    background: #fffbef;
+    border-color: #f7e8b2;
+    color: #856a00;
+  }
+  [data-theme='light'] .status-badge-approved {
+    background: #f1f8e9;
+    border-color: #dcedc8;
+    color: #33691e;
+  }
+  [data-theme='light'] .status-badge-cancelled,
+  [data-theme='light'] .status-badge-rejected {
+    background: #fff5f5;
+    border-color: #fed7d7;
+    color: #9b2c2c;
+  }
+}

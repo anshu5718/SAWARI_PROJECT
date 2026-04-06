@@ -21,10 +21,10 @@ function BookVehicle() {
   });
 
   useEffect(() => {
-    fetch(`https://nisha.pythonanywhere.com/api/viewer-homepage/`, { credentials: 'include' })
+    fetch(`http://localhost:8000/api/viewer-homepage/`, { credentials: 'include' })
       .then(res => res.json())
       .then(json => {
-        const found = (json.vehicles || []).find(v => String(v.id) === String(id));
+        const found = (Array.isArray(json) ? json : []).find(v => String(v.id) === String(id));
         if (found) setVehicle(found);
         else setError('Vehicle not found.');
       })
@@ -67,7 +67,7 @@ function BookVehicle() {
 
     setSubmitting(true);
     try {
-      const response = await fetch('https://nisha.pythonanywhere.com/api/book-vehicle/', {
+        const response = await fetch('http://localhost:8000/api/book-vehicle/', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -99,12 +99,12 @@ function BookVehicle() {
   };
 
   const inputClass =
-    'w-full bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg px-4 py-2.5 text-sm text-[#f0ede8] placeholder-[#333] outline-none focus:border-[#e8c84a] transition-colors';
+    'w-full  border border-[#2a2a2a] rounded-lg px-4 py-2.5 text-sm text-[#f0ede8] placeholder-[#333] outline-none focus:border-[#e8c84a] transition-colors';
   const labelClass = 'text-xs uppercase tracking-widest text-[#555]';
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0f0f0f] flex items-center justify-center">
+      <div className="min-h-screen  flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
           <div className="w-8 h-8 border-2 border-[#e8c84a] border-t-transparent rounded-full animate-spin" />
           <p className="text-sm text-[#444]">Loading vehicle...</p>
@@ -115,7 +115,7 @@ function BookVehicle() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-[#0f0f0f] flex items-center justify-center px-4">
+      <div className="min-h-screen  flex items-center justify-center px-4">
         <div className="flex flex-col items-center gap-4 text-center">
           <div
             className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl"
@@ -133,7 +133,7 @@ function BookVehicle() {
   }
 
   return (
-    <main className="min-h-screen bg-[#0f0f0f] px-4 py-12" style={{ fontFamily: "'Inter', sans-serif" }}>
+    <main className="min-h-screen  px-4 py-12" style={{ fontFamily: "'Inter', sans-serif" }}>
       <div className="max-w-xl mx-auto">
 
         {/* Back button */}
@@ -157,7 +157,7 @@ function BookVehicle() {
 
         {/* Vehicle summary card */}
         {vehicle && (
-          <div className="bg-[#141414] border border-[#1e1e1e] rounded-2xl overflow-hidden mb-6">
+          <div className=" border border-[#1e1e1e] rounded-2xl overflow-hidden mb-6">
             {vehicle.vehicle_image ? (
               <img src={vehicle.vehicle_image} alt={vehicle.name} className="w-full h-40 object-cover" />
             ) : (
@@ -206,7 +206,7 @@ function BookVehicle() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
 
           {/* Dates */}
-          <div className="bg-[#141414] border border-[#1e1e1e] rounded-2xl p-6 flex flex-col gap-5">
+          <div className=" border border-[#1e1e1e] rounded-2xl p-6 flex flex-col gap-5">
             <p className="text-xs uppercase tracking-widest text-[#444]">Rental period</p>
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
@@ -241,7 +241,7 @@ function BookVehicle() {
           </div>
 
           {/* Locations */}
-          <div className="bg-[#141414] border border-[#1e1e1e] rounded-2xl p-6 flex flex-col gap-5">
+          <div className=" border border-[#1e1e1e] rounded-2xl p-6 flex flex-col gap-5">
             <p className="text-xs uppercase tracking-widest text-[#444]">Locations</p>
             <div className="flex flex-col gap-1.5">
               <label className={labelClass}>Pickup location</label>
@@ -270,7 +270,7 @@ function BookVehicle() {
           </div>
 
           {/* Purpose */}
-          <div className="bg-[#141414] border border-[#1e1e1e] rounded-2xl p-6 flex flex-col gap-5">
+          <div className=" border border-[#1e1e1e] rounded-2xl p-6 flex flex-col gap-5">
             <p className="text-xs uppercase tracking-widest text-[#444]">Trip details</p>
             <div className="flex flex-col gap-1.5">
               <label className={labelClass}>

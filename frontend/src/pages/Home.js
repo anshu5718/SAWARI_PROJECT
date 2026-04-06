@@ -5,7 +5,7 @@ import heroBg from '../img/hero-bg.png';
 function Home() {
   return (
     <main
-      className="min-h-screen bg-[#0f0f0f] text-[#f0ede8] flex flex-col"
+      className="min-h-screen  text-[#f0ede8] flex flex-col"
       style={{ fontFamily: "'Inter', sans-serif" }}
     >
       {/* Hero Section with background image */}
@@ -107,7 +107,7 @@ function Home() {
       <section className="max-w-3xl mx-auto w-full px-6 py-16 grid md:grid-cols-2 gap-6">
 
         {/* About card */}
-        <div className="bg-[#141414] border border-[#1e1e1e] rounded-xl p-6">
+        <div className=" border border-[#1e1e1e] rounded-xl p-6">
           <p className="text-xs uppercase tracking-widest text-[#444] mb-4">About Sawari</p>
           <p className="text-[#888] text-sm leading-relaxed">
             Sawari means "ride" — and that's exactly what we deliver. We connect
@@ -117,7 +117,7 @@ function Home() {
         </div>
 
         {/* For travellers card */}
-        <div className="bg-[#141414] border border-[#1e1e1e] rounded-xl p-6">
+        <div className=" border border-[#1e1e1e] rounded-xl p-6">
           <p className="text-xs uppercase tracking-widest text-[#444] mb-4">For travellers</p>
           <p className="text-[#888] text-sm leading-relaxed mb-6">
             Browse available vehicles, choose your travel dates, tell us where

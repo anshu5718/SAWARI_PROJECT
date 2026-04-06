@@ -48,7 +48,7 @@ function RejectBooking() {
 
   return (
     <main
-      className="min-h-screen bg-[#0f0f0f] flex items-center justify-center px-4"
+      className="min-h-screen  flex items-center justify-center px-4"
       style={{ fontFamily: "'Inter', sans-serif" }}
     >
       <div className="w-full max-w-sm">
@@ -76,7 +76,7 @@ function RejectBooking() {
         </div>
 
         {/* Card */}
-        <div className="bg-[#141414] border border-[#1e1e1e] rounded-2xl p-6 flex flex-col gap-5">
+        <div className=" border border-[#1e1e1e] rounded-2xl p-6 flex flex-col gap-5">
 
           {error && (
             <div className="px-4 py-3 rounded-lg bg-[#1e0e0e] border border-[#3a1a1a] text-[#e05a4a] text-sm">
@@ -115,7 +115,7 @@ function RejectBooking() {
                 onChange={(e) => setCustom(e.target.value)}
                 placeholder="Enter your reason..."
                 rows={3}
-                className="w-full bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg px-4 py-2.5 text-sm text-[#f0ede8] placeholder-[#333] outline-none focus:border-[#e8c84a] transition-colors resize-none"
+                className="w-full  border border-[#2a2a2a] rounded-lg px-4 py-2.5 text-sm text-[#f0ede8] placeholder-[#333] outline-none focus:border-[#e8c84a] transition-colors resize-none"
               />
             </div>
           )}

@@ -1,6 +1,7 @@
 // src/api.js
 import { getCookie } from './pages/users/utils';
-const API_BASE = "https://nisha.pythonanywhere.com/api";
+
+const API_BASE = "http://localhost:8000/api";
 
 export const apiRequest = async (url, options = {}) => {
   const response = await fetch(`${API_BASE}${url}`, {

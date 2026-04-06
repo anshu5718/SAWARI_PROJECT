@@ -25,6 +25,7 @@ import AdminBookings from './pages/admin/AdminBookings';
 import AdminUserDetail from './pages/admin/AdminUserDetail';
 import AdminVehicleDetail from './pages/admin/AdminVehicleDetail';
 import DeleteVehicle from './pages/vehicles/DeleteVehicle';
+import AdminBookingDetails from './pages/admin/AdminBookingDetails';
 
 function App() {
   const [user, setUser] = useState(() => {
@@ -64,6 +65,7 @@ function App() {
         <Route path="/admin/bookings" element={<Layout user={user}><AdminBookings /></Layout>} />
         <Route path="/admin/users/:id" element={<Layout user={user}><AdminUserDetail /></Layout>} />
         <Route path="/admin/vehicles/:id" element={<Layout user={user}><AdminVehicleDetail /></Layout>} />
+        <Route path="/admin/bookings/:id" element={<Layout user={user}><AdminBookingDetails /></Layout>} />
         <Route path="/delete-vehicle/:id" element={<Layout user={user}><DeleteVehicle /></Layout>} />
       </Routes>
     </Router>

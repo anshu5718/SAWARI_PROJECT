@@ -37,7 +37,7 @@ function DeleteVehicle() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0f0f0f] flex items-center justify-center">
+      <div className="min-h-screen  flex items-center justify-center">
         <div className="w-8 h-8 border-2 border-[#e8c84a] border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -46,7 +46,7 @@ function DeleteVehicle() {
   return (
     
     <main
-      className="min-h-screen bg-[#0f0f0f] flex items-center justify-center px-4"
+      className="min-h-screen  flex items-center justify-center px-4"
       style={{ fontFamily: "'Inter', sans-serif" }}
     >
 
@@ -89,7 +89,7 @@ function DeleteVehicle() {
 
         {/* Vehicle summary */}
         {vehicle && (
-          <div className="bg-[#141414] border border-[#1e1e1e] rounded-2xl overflow-hidden mb-5">
+          <div className=" border border-[#1e1e1e] rounded-2xl overflow-hidden mb-5">
             {vehicle.vehicle_image ? (
               <img src={vehicle.vehicle_image} alt={vehicle.name} className="w-full h-36 object-cover" />
             ) : (

@@ -55,7 +55,7 @@ function EditVehicle() {
 
     try {
         // Step 1 — update text fields via JSON
-        const response = await fetch(`https://nisha.pythonanywhere.com/api/edit-vehicle/${id}/`, {
+        const response = await fetch(`http://localhost:8000/api/edit-vehicle/${id}/`, {
         method: 'PATCH',
         credentials: 'include',
         headers: {
@@ -84,7 +84,7 @@ function EditVehicle() {
             for (let pair of form.entries()) {  // add this
                 console.log(pair[0], pair[1]);    // add this
             }
-            const imgResponse = await fetch(`https://nisha.pythonanywhere.com/api/edit-vehicle-image/${id}/`, {
+            const imgResponse = await fetch(`http://localhost:8000/api/edit-vehicle-image/${id}/`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'X-CSRFToken': getCookie('csrftoken') },
@@ -103,12 +103,12 @@ function EditVehicle() {
         setSubmitting(false);
     }
     };
-  const inputClass = 'w-full bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg px-4 py-2.5 text-sm text-[#f0ede8] placeholder-[#333] outline-none focus:border-[#e8c84a] transition-colors';
+  const inputClass = 'w-full  border border-[#2a2a2a] rounded-lg px-4 py-2.5 text-sm text-[#f0ede8] placeholder-[#333] outline-none focus:border-[#e8c84a] transition-colors';
   const labelClass = 'text-xs uppercase tracking-widest text-[#555]';
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0f0f0f] flex items-center justify-center">
+      <div className="min-h-screen  flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
           <div className="w-8 h-8 border-2 border-[#e8c84a] border-t-transparent rounded-full animate-spin" />
           <p className="text-sm text-[#444]">Loading vehicle...</p>
@@ -119,7 +119,7 @@ function EditVehicle() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-[#0f0f0f] flex items-center justify-center px-4">
+      <div className="min-h-screen  flex items-center justify-center px-4">
         <div className="flex flex-col items-center gap-4 text-center">
           <div
             className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl"
@@ -137,7 +137,7 @@ function EditVehicle() {
   }
 
   return (
-    <main className="min-h-screen bg-[#0f0f0f] px-4 py-12" style={{ fontFamily: "'Inter', sans-serif" }}>
+    <main className="min-h-screen  px-4 py-12" style={{ fontFamily: "'Inter', sans-serif" }}>
       <div className="max-w-xl mx-auto">
 
         {/* Back button */}
@@ -168,7 +168,7 @@ function EditVehicle() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
 
           {/* Image upload */}
-          <div className="bg-[#141414] border border-[#1e1e1e] rounded-2xl overflow-hidden">
+          <div className=" border border-[#1e1e1e] rounded-2xl overflow-hidden">
             {imagePreview ? (
               <div className="relative">
                 <img src={imagePreview} alt="Vehicle" className="w-full h-48 object-cover" />
@@ -207,7 +207,7 @@ function EditVehicle() {
           </div>
 
           {/* Editable fields */}
-          <div className="bg-[#141414] border border-[#1e1e1e] rounded-2xl p-6 flex flex-col gap-5">
+          <div className=" border border-[#1e1e1e] rounded-2xl p-6 flex flex-col gap-5">
             <p className="text-xs uppercase tracking-widest text-[#444]">Vehicle details</p>
 
             <div className="flex flex-col gap-1.5">

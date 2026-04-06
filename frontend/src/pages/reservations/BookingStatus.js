@@ -67,7 +67,7 @@ function BookingStatus() {
       <div className="flex flex-col gap-4 animate-pulse">
         <div className="h-4 bg-[#1e1e1e] rounded w-24" />
         <div className="h-8 bg-[#1e1e1e] rounded w-64" />
-        <div className="h-48 bg-[#141414] border border-[#1e1e1e] rounded-2xl mt-4" />
+        <div className="h-48  border border-[#1e1e1e] rounded-2xl mt-4" />
       </div>
     </main>
   );
@@ -100,7 +100,7 @@ function BookingStatus() {
       </div>
 
       {/* Details card */}
-      <div className="bg-[#141414] border border-[#1e1e1e] rounded-2xl p-6 mb-4">
+      <div className=" border border-[#1e1e1e] rounded-2xl p-6 mb-4">
         <div className="flex items-start justify-between mb-5">
           <div>
             <p className="text-xs uppercase tracking-widest text-[#444] mb-1">Vehicle</p>
@@ -138,7 +138,7 @@ function BookingStatus() {
       </div>
 
       {/* Update status card */}
-      <div className="bg-[#141414] border border-[#1e1e1e] rounded-2xl p-6">
+      <div className=" border border-[#1e1e1e] rounded-2xl p-6">
         <p className="text-xs uppercase tracking-widest text-[#444] mb-4">Update status</p>
 
         {error && (

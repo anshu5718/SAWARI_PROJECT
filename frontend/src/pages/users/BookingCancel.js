@@ -10,7 +10,7 @@ function BookingCancel({ reservationId, onCancelSuccess, onDismiss }) {
     setError(null);
 
     try {
-      const response = await fetch(`https://nisha.pythonanywhere.com/api/booking-cancel/${reservationId}/`, {
+      const response = await fetch(`http://localhost:8000/api/booking-cancel/${reservationId}/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

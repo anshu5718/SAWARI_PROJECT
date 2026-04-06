@@ -66,7 +66,7 @@ function UserBookings() {
 
   return (
     <main
-      className="min-h-screen bg-[#0f0f0f] px-8 py-10 max-w-7xl mx-auto"
+      className="min-h-screen  px-8 py-10 max-w-7xl mx-auto"
       style={{ fontFamily: "'Inter', sans-serif" }}
     >
       {/* Back button */}
@@ -105,7 +105,7 @@ function UserBookings() {
       {loading && (
         <div className="flex flex-col gap-3">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="bg-[#141414] border border-[#1e1e1e] rounded-xl h-16 animate-pulse" />
+            <div key={i} className=" border border-[#1e1e1e] rounded-xl h-16 animate-pulse" />
           ))}
         </div>
       )}
@@ -134,7 +134,7 @@ function UserBookings() {
           {reservations.map((r) => (
             <div
               key={r.id}
-              className="bg-[#141414] border border-[#1e1e1e] rounded-xl px-5 py-4 flex flex-col sm:flex-row sm:items-center gap-4 hover:border-[#2a2a2a] transition-colors"
+              className=" border border-[#1e1e1e] rounded-xl px-5 py-4 flex flex-col sm:flex-row sm:items-center gap-4 hover:border-[#2a2a2a] transition-colors"
             >
               {/* Booking ID */}
               <div className="shrink-0 w-12 text-center">

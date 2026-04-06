@@ -19,7 +19,7 @@ function DriverHomePage() {
     apiRequest('/driver-homepage/')
       .then(data => {
         console.log('Driver data:', data);
-        setVehicles(data.vehicles || []);
+        setVehicles(Array.isArray(data) ? data : []);
       })
       .catch(err => console.error('Error:', err))
       .finally(() => setLoading(false));
@@ -43,7 +43,7 @@ function DriverHomePage() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => navigate('/driver-bookings')}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm border border-[#2a2a2a] text-[#888] hover:text-[#f0ede8] hover:border-[#444] transition-all bg-[#141414]"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm border border-[#2a2a2a] text-[#888] hover:text-[#f0ede8] hover:border-[#444] transition-all "
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
@@ -67,7 +67,7 @@ function DriverHomePage() {
       {loading && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="bg-[#141414] border border-[#1e1e1e] rounded-xl overflow-hidden animate-pulse">
+            <div key={i} className=" border border-[#1e1e1e] rounded-xl overflow-hidden animate-pulse">
               <div className="h-44 bg-[#1e1e1e]" />
               <div className="p-4 flex flex-col gap-3">
                 <div className="h-4 bg-[#1e1e1e] rounded w-2/3" />
@@ -115,7 +115,7 @@ function DriverHomePage() {
             return (
               <div
                 key={vehicle.id}
-                className="bg-[#141414] border border-[#1e1e1e] rounded-xl overflow-hidden flex flex-col hover:border-[#2a2a2a] transition-colors"
+                className=" border border-[#1e1e1e] rounded-xl overflow-hidden flex flex-col hover:border-[#2a2a2a] transition-colors"
               >
                 {/* Vehicle image with edit overlay */}
                 <div className="relative">

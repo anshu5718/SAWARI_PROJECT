@@ -65,7 +65,7 @@ function RegisterVehicle() {
     data.append('vehicle_image', image);
 
     try {
-      const response = await fetch('https://nisha.pythonanywhere.com/api/register-vehicle/', {
+      const response = await fetch('http://localhost:8000/api/register-vehicle/', {
         method: 'POST',
         body: data,
         credentials: 'include',
@@ -93,12 +93,12 @@ function RegisterVehicle() {
   };
 
   const inputClass =
-    'w-full bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg px-4 py-2.5 text-sm text-[#f0ede8] placeholder-[#333] outline-none focus:border-[#e8c84a] transition-colors';
+    'w-full  border border-[#2a2a2a] rounded-lg px-4 py-2.5 text-sm text-[#f0ede8] placeholder-[#333] outline-none focus:border-[#e8c84a] transition-colors';
   const labelClass = 'text-xs uppercase tracking-widest text-[#555]';
 
   return (
     <main
-      className="min-h-screen bg-[#0f0f0f] px-4 py-12"
+      className="min-h-screen  px-4 py-12"
       style={{ fontFamily: "'Inter', sans-serif" }}
     >
       <div className="max-w-xl mx-auto">
@@ -136,7 +136,7 @@ function RegisterVehicle() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
 
           {/* ── Vehicle Info ── */}
-          <section className="bg-[#141414] border border-[#1e1e1e] rounded-2xl p-6 flex flex-col gap-5">
+          <section className=" border border-[#1e1e1e] rounded-2xl p-6 flex flex-col gap-5">
             <p className="text-xs uppercase tracking-widest text-[#444]">Vehicle info</p>
 
             <div className="flex flex-col gap-1.5">
@@ -231,7 +231,7 @@ function RegisterVehicle() {
           </section>
 
           {/* ── Vehicle Photo ── */}
-          <section className="bg-[#141414] border border-[#1e1e1e] rounded-2xl p-6 flex flex-col gap-4">
+          <section className=" border border-[#1e1e1e] rounded-2xl p-6 flex flex-col gap-4">
             <p className="text-xs uppercase tracking-widest text-[#444]">Vehicle photo</p>
 
             {preview ? (
@@ -240,7 +240,7 @@ function RegisterVehicle() {
                 <button
                   type="button"
                   onClick={handleRemoveImage}
-                  className="absolute top-2 right-2 bg-[#0f0f0f] border border-[#2a2a2a] text-[#888] text-xs px-3 py-1 rounded-lg hover:text-white transition-colors"
+                  className="absolute top-2 right-2  border border-[#2a2a2a] text-[#888] text-xs px-3 py-1 rounded-lg hover:text-white transition-colors"
                 >
                   Remove
                 </button>
@@ -274,7 +274,7 @@ function RegisterVehicle() {
           </section>
 
           {/* ── Documents ── */}
-          <section className="bg-[#141414] border border-[#1e1e1e] rounded-2xl p-6 flex flex-col gap-5">
+          <section className=" border border-[#1e1e1e] rounded-2xl p-6 flex flex-col gap-5">
             <p className="text-xs uppercase tracking-widest text-[#444]">Your documents</p>
 
             <div className="flex flex-col gap-1.5">

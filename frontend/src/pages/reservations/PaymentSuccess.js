@@ -9,7 +9,7 @@ function PaymentSuccess() {
   useEffect(() => {
     const pidx = searchParams.get('pidx');
 
-    fetch(`https://nisha.pythonanywhere.com/api/payment-success/?pidx=${pidx}`, {
+    fetch(`http://localhost:8000/api/payment-success/?pidx=${pidx}`, {
       credentials: 'include',
     })
       .then((res) => res.json())
@@ -30,7 +30,7 @@ function PaymentSuccess() {
 
   return (
     <main
-      className="min-h-screen bg-[#0f0f0f] flex items-center justify-center px-4"
+      className="min-h-screen  flex items-center justify-center px-4"
       style={{ fontFamily: "'Inter', sans-serif" }}
     >
       <div className="flex flex-col items-center text-center max-w-xs">

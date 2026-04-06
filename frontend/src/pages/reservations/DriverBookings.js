@@ -101,7 +101,7 @@ function DriverBookings() {
       {loading && (
         <div className="flex flex-col gap-3">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="bg-[#141414] border border-[#1e1e1e] rounded-xl h-20 animate-pulse" />
+            <div key={i} className=" border border-[#1e1e1e] rounded-xl h-20 animate-pulse" />
           ))}
         </div>
       )}
@@ -134,7 +134,7 @@ function DriverBookings() {
             return (
               <div
                 key={res.id}
-                className="bg-[#141414] border border-[#1e1e1e] rounded-xl px-5 py-4 flex flex-col sm:flex-row sm:items-center gap-4 hover:border-[#2a2a2a] transition-colors"
+                className=" border border-[#1e1e1e] rounded-xl px-5 py-4 flex flex-col sm:flex-row sm:items-center gap-4 hover:border-[#2a2a2a] transition-colors"
               >
                 {/* Booking ID */}
                 <div className="shrink-0 w-12">
@@ -169,7 +169,7 @@ function DriverBookings() {
                     value={res.status}
                     onChange={(e) => handleUpdate(res.id, e.target.value)}
                     disabled={isUpdating || ['cancelled', 'rejected'].includes(res.status)}
-                    className="bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg px-3 py-1.5 text-xs text-[#888] outline-none focus:border-[#e8c84a] transition-colors disabled:opacity-50 capitalize"
+                    className=" border border-[#2a2a2a] rounded-lg px-3 py-1.5 text-xs text-[#888] outline-none focus:border-[#e8c84a] transition-colors disabled:opacity-50 capitalize"
                   >
                     {STATUSES.map(s => (
                       <option key={s} value={s} className="capitalize">{s}</option>

@@ -1,20 +1,21 @@
-
+# vehicles/api_views.py
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
-from ninja.responses import Response
-
-from ninja import Form, File
+from ninja import Form, File, Body
+from ninja.security import django_auth
 from typing import Optional
 from ninja.files import UploadedFile
-from vehicles.serializers import VehicleEditSchema, VehicleSerializer
-from .models import Vehicle
-from ninja.security import django_auth
 
 from sawari.ninja_api import api
+from vehicles.schemas import VehicleEditSchema, VehicleDetailSchema
+from user_acc.schemas import VehicleOut
+from .models import Vehicle
 
-@api.post("/register-vehicle/", auth=django_auth, include_in_schema=False)
+
+@api.post("/register-vehicle/", auth=django_auth)
 def register_vehicle_api(
     request,
+    # Form + File cannot use schema — multipart upload limitation
     name: str = Form(...),
     vehicle_type: str = Form(...),
     capacity: int = Form(...),
@@ -41,23 +42,37 @@ def register_vehicle_api(
             description=description,
         )
     except IntegrityError:
-        return Response(
-                {"success": False, "message": "A vehicle with this registration number already exists."},
-                status_code=400
-            )
+        return {"success": False, "message": "A vehicle with this registration number already exists."}
+
     if vehicle_image:
         vehicle.vehicle_image.save(vehicle_image.name, vehicle_image, save=True)
 
     return {"success": True, "message": "Vehicle submitted for approval!"}
 
-@api.get("/driver-homepage/")
+
+@api.get("/driver-homepage/", response=list[VehicleOut], auth=django_auth)
 def driver_homepage_api(request):
     vehicles = Vehicle.objects.filter(owner=request.user, is_active=True, kyc_approved=True)
-    serializer = VehicleSerializer(vehicles, many=True, context={'request': request})
-    return {"vehicles": serializer.data}
+    result = []
+    for v in vehicles:
+        result.append({
+            "id": v.id,
+            "name": v.name,
+            "vehicle_type": v.vehicle_type,
+            "vehicle_image": request.build_absolute_uri(v.vehicle_image.url) if v.vehicle_image else None,
+            "capacity": v.capacity,
+            "registration_number": v.registration_number,
+            "description": v.description,
+            "cost_per_day": float(v.cost_per_day),
+            "citizenship_number": v.citizenship_number,
+            "license_number": v.license_number,
+            "kyc_approved": v.kyc_approved,
+            "current_status": v.current_status,
+        })
+    return result
 
 
-@api.get("/edit-vehicle/{vehicle_id}/")
+@api.get("/edit-vehicle/{vehicle_id}/", response=VehicleDetailSchema, auth=django_auth)
 def get_vehicle_api(request, vehicle_id: int):
     vehicle = get_object_or_404(Vehicle, id=vehicle_id, owner=request.user)
     return {
@@ -68,33 +83,31 @@ def get_vehicle_api(request, vehicle_id: int):
         "vehicle_image": request.build_absolute_uri(vehicle.vehicle_image.url) if vehicle.vehicle_image else None,
     }
 
-@api.patch("/edit-vehicle/{vehicle_id}/")
-def update_vehicle_api(request, vehicle_id: int, data: VehicleEditSchema):
+
+@api.patch("/edit-vehicle/{vehicle_id}/", auth=django_auth)
+def update_vehicle_api(request, vehicle_id: int, data: VehicleEditSchema = Body(...)):
     vehicle = get_object_or_404(Vehicle, id=vehicle_id, owner=request.user)
-    if data.name is not None:
-        vehicle.name = data.name
-    if data.description is not None:
-        vehicle.description = data.description
-    if data.cost_per_day is not None:
-        vehicle.cost_per_day = data.cost_per_day
+    payload = data.model_dump(exclude_unset=True)
+    for field, value in payload.items():
+        setattr(vehicle, field, value)
+
     vehicle.save()
     return {"success": True, "message": "Vehicle updated successfully."}
 
-@api.post("/edit-vehicle-image/{vehicle_id}/")
+
+@api.post("/edit-vehicle-image/{vehicle_id}/", auth=django_auth)
 def update_vehicle_image_api(request, vehicle_id: int):
     vehicle = get_object_or_404(Vehicle, id=vehicle_id, owner=request.user)
-    print('FILES:', request.FILES)
     if 'vehicle_image' in request.FILES:
         vehicle.vehicle_image = request.FILES['vehicle_image']
         vehicle.save()
     return {"success": True, "message": "Image updated successfully."}
 
 
-@api.delete("/delete-vehicle/{vehicle_id}/")
+@api.delete("/delete-vehicle/{vehicle_id}/", auth=django_auth)
 def delete_vehicle_api(request, vehicle_id: int):
     vehicle = get_object_or_404(Vehicle, id=vehicle_id, owner=request.user)
     if vehicle.current_status == 'available':
         vehicle.delete()
-    else:
-        return {"success": False, "message": "Vehicle is already booked."}
-    return {"success": True, "message": "Vehicle deleted successfully."}
+        return {"success": True, "message": "Vehicle deleted successfully."}
+    return {"success": False, "message": "Vehicle is already booked."}

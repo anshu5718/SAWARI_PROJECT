@@ -19,11 +19,11 @@ function ViewerHomePage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('https://nisha.pythonanywhere.com/api/viewer-homepage/', { credentials: 'include' })
+    fetch('http://localhost:8000/api/viewer-homepage/', { credentials: 'include' })
       .then(res => res.json())
       .then(json => {
         console.log('Viewer data:', json);
-        if (json.vehicles) setVehicles(json.vehicles);
+        if (Array.isArray(json)) setVehicles(json);  // API returns a direct list
       })
       .catch(err => console.error('Error fetching vehicles:', err))
       .finally(() => setLoading(false));
@@ -46,7 +46,7 @@ function ViewerHomePage() {
 
   return (
     <main
-      className="min-h-screen bg-[#0f0f0f] px-8 py-10 max-w-7xl mx-auto"
+      className="min-h-screen  px-8 py-10 max-w-7xl mx-auto"
       style={{ fontFamily: "'Inter', sans-serif" }}
     >
       {/* Header */}
@@ -71,11 +71,11 @@ function ViewerHomePage() {
             placeholder="Search by name, type, registration..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-[#141414] border border-[#2a2a2a] rounded-lg pl-9 pr-4 py-2.5 text-sm text-[#f0ede8] placeholder-[#333] outline-none focus:border-[#e8c84a] transition-colors"
+            className="w-full  border border-[#2a2a2a] rounded-lg pl-9 pr-4 py-2.5 text-sm text-[#f0ede8] placeholder-[#333] outline-none focus:border-[#e8c84a] transition-colors"
           />
         </div>
 
-        {/* Type filter pills
+        {/* Type filter pills */}
         <div className="flex gap-2 flex-wrap">
           {vehicleTypes.map((type) => (
             <button
@@ -91,14 +91,14 @@ function ViewerHomePage() {
               {type === 'all' ? 'All' : `${VEHICLE_ICONS[type] || '🚘'} ${type}`}
             </button>
           ))}
-        </div> */}
+        </div>
       </div>
 
       {/* Loading skeletons */}
       {loading && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {[...Array(6)].map((_, i) => (
-            <div key={i} className="bg-[#141414] border border-[#1e1e1e] rounded-xl overflow-hidden animate-pulse">
+            <div key={i} className=" border border-[#1e1e1e] rounded-xl overflow-hidden animate-pulse">
               <div className="h-44 bg-[#1e1e1e]" />
               <div className="p-4 flex flex-col gap-3">
                 <div className="h-4 bg-[#1e1e1e] rounded w-2/3" />
@@ -135,16 +135,16 @@ function ViewerHomePage() {
       {!loading && filtered.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map((vehicle) => {
-            const booked = isBooked(vehicle.current_status);  // ✅ fixed
-            const statusStyle = STATUS_STYLES[vehicle.current_status];  // ✅ fixed
+            const booked = isBooked(vehicle.current_status);
+            const statusStyle = STATUS_STYLES[vehicle.current_status];
 
             return (
               <div
                 key={vehicle.id}
-                className="bg-[#141414] border border-[#1e1e1e] rounded-xl overflow-hidden flex flex-col hover:border-[#2a2a2a] transition-colors"
+                className=" border border-[#1e1e1e] rounded-xl overflow-hidden flex flex-col hover:border-[#2a2a2a] transition-colors"
               >
                 {/* Image */}
-                {vehicle.vehicle_image ? (  // ✅ fixed
+                {vehicle.vehicle_image ? (
                   <img
                     src={vehicle.vehicle_image}
                     alt={vehicle.name}
@@ -222,7 +222,6 @@ function ViewerHomePage() {
           })}
         </div>
       )}
-
     </main>
   );
 }

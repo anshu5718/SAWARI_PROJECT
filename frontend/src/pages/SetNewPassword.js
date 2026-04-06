@@ -42,7 +42,7 @@ function SetNewPassword() {
     setLoading(true);
 
     try {
-      const response = await fetch('https://nisha.pythonanywhere.com/api/set-new-password/', {
+      const response = await fetch('http://localhost:8000/api/set-new-password/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ function SetNewPassword() {
 
   return (
     <main
-      className="min-h-screen bg-[#0f0f0f] flex items-center justify-center px-4"
+      className="min-h-screen  flex items-center justify-center px-4"
       style={{ fontFamily: "'Inter', sans-serif" }}
     >
       <div className="w-full max-w-sm">
@@ -103,7 +103,7 @@ function SetNewPassword() {
         </div>
 
         {/* Form card */}
-        <div className="bg-[#141414] border border-[#1e1e1e] rounded-2xl p-7">
+        <div className=" border border-[#1e1e1e] rounded-2xl p-7">
 
           {error && (
             <div className="mb-5 px-4 py-3 rounded-lg bg-[#1e0e0e] border border-[#3a1a1a] text-[#e05a4a] text-sm">
@@ -124,7 +124,7 @@ function SetNewPassword() {
                 required
                 value={fields.email}
                 onChange={(e) => setFields({ ...fields, email: e.target.value })}
-                className="w-full bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg px-4 py-2.5 text-sm text-[#f0ede8] placeholder-[#333] outline-none focus:border-[#e8c84a] transition-colors"
+                className="w-full  border border-[#2a2a2a] rounded-lg px-4 py-2.5 text-sm text-[#f0ede8] placeholder-[#333] outline-none focus:border-[#e8c84a] transition-colors"
               />
             </div>
 
@@ -140,7 +140,7 @@ function SetNewPassword() {
                 placeholder="Min. 8 characters"
                 required
                 onChange={(e) => setFields({ ...fields, password1: e.target.value })}
-                className="w-full bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg px-4 py-2.5 text-sm text-[#f0ede8] placeholder-[#333] outline-none focus:border-[#e8c84a] transition-colors"
+                className="w-full  border border-[#2a2a2a] rounded-lg px-4 py-2.5 text-sm text-[#f0ede8] placeholder-[#333] outline-none focus:border-[#e8c84a] transition-colors"
               />
             </div>
 
@@ -153,7 +153,7 @@ function SetNewPassword() {
                 placeholder="Re-enter your password"
                 required
                 onChange={(e) => setFields({ ...fields, password2: e.target.value })}
-                className="w-full bg-[#0f0f0f] rounded-lg px-4 py-2.5 text-sm text-[#f0ede8] placeholder-[#333] outline-none transition-colors"
+                className="w-full  rounded-lg px-4 py-2.5 text-sm text-[#f0ede8] placeholder-[#333] outline-none transition-colors"
                 style={{
                   border: passwordsMatch
                     ? '1px solid #4a8a2a'
