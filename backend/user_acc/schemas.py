@@ -10,12 +10,6 @@ class LoginPayload(Schema):
     password: str 
 
 
-class SignupPayload(Schema):
-    username: str 
-    email: EmailStr
-    password: str 
-    user_type: Literal['customer', 'driver']  
-
 
 class ForgetPasswordPayload(Schema):
     email: EmailStr
@@ -52,3 +46,20 @@ class VehicleOut(Schema):
     license_number: str
     kyc_approved: bool
     current_status: str
+    is_booked: bool
+
+class SignupPayload(Schema):
+    username: str
+    email: str
+    password: str
+    phone_number: str
+    user_type: str = "customer"  # default value
+
+    # Optional: Add validation
+    class Config:
+        extra = "forbid"  
+
+class UpdateUserPayload(Schema):
+    phone_number: str | None = None
+    username: str | None = None
+    

@@ -102,8 +102,9 @@ function AdminVehicles() {
             <span className="col-span-1"></span>
             <span className="col-span-3">Vehicle</span>
             <span className="col-span-2">Owner</span>
-            <span className="col-span-2">Type · Reg</span>
+            <span className="col-span-1">Type · Reg</span>
             <span className="col-span-1 text-center">KYC</span>
+            <span className="col-span-1 text-center">Booked</span>
             <span className="col-span-2 text-right">Action</span>
           </div>
 
@@ -158,7 +159,7 @@ function AdminVehicles() {
                   </div>
 
                   {/* Type · Reg */}
-                  <div className="col-span-2 pr-4">
+                  <div className="col-span-1 pr-4">
                     <p className="text-xs text-theme-secondary capitalize">{v.vehicle_type}</p>
                     <p className="text-xs text-theme-muted mt-0.5 font-mono">{v.registration_number}</p>
                   </div>
@@ -171,6 +172,17 @@ function AdminVehicles() {
                         : { background: 'var(--status-pending-bg)', border: '1px solid var(--status-pending-border)', color: 'var(--status-pending-text)' }
                       }>
                       {v.kyc_approved ? 'Approved' : 'Pending'}
+                    </span>
+                  </div>
+
+                  {/* is_booked */}
+                  <div className="col-span-1 flex justify-center">
+                    <span className="text-[10px] px-2.5 py-1 rounded-full font-semibold whitespace-nowrap"
+                      style={v.is_booked
+                        ? { background: 'var(--status-pending-bg)', border: '1px solid var(--status-pending-border)', color: 'var(--status-pending-text)' }
+                        : { background: 'var(--status-active-bg)', border: '1px solid var(--status-active-border)', color: 'var(--status-active-text)' }
+                      }>
+                      {v.is_booked ? 'Booked' : 'Free'}
                     </span>
                   </div>
 

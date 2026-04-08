@@ -1,6 +1,7 @@
 # admin_panel/schemas.py
 from typing import Optional
 from ninja import Schema
+from pydantic.v1 import ConfigDict
 
 
 # ── Dashboard ─────────────────────────────────────────────────────────
@@ -33,7 +34,9 @@ class AdminVehicleSchema(Schema):
     license_number: str
     kyc_approved: bool
     is_active: bool
+    is_booked: bool
     vehicle_image: Optional[str] = None
+
 
 
 class AdminVehicleDetailSchema(Schema):
@@ -67,6 +70,7 @@ class AdminUserDetailSchema(Schema):
     id: int
     username: str
     email: str
+    phone_number: Optional[str] = None
     first_name: str
     last_name: str
     user_type: str
@@ -77,8 +81,10 @@ class AdminUserDetailSchema(Schema):
 
 # ── Booking ───────────────────────────────────────────────────────────
 class AdminBookingSchema(Schema):
+    model_config = ConfigDict(from_attributes=True)
     id: int
     vehicle: str
+    owner: str
     user: str
     status: str
     payment_status: str
@@ -87,9 +93,13 @@ class AdminBookingSchema(Schema):
 
 
 class BookingDetailSchema(Schema):
+    model_config = ConfigDict(from_attributes=True)
     id: int
     vehicle: str
+    owner: str
+    owner_phone_number: str
     user: str
+    customer_phone_number: str
     status: str
     payment_status: str
     start_date: str

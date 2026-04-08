@@ -5,15 +5,14 @@ from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 import random
 
+
 class User_profile(AbstractUser):
-    USER_TYPE = [
-        ('customer', 'customer'),
-        ('driver', 'driver'),
-        ('admin', 'admin')
-    ]
-    user_type = models.CharField(max_length=10, choices=USER_TYPE, default='customer')
+    USER_TYPE = [("customer", "customer"), ("driver", "driver"), ("admin", "admin")]
+    user_type = models.CharField(max_length=10, choices=USER_TYPE, default="customer")
+    phone_number = models.CharField(max_length=20, unique=True, null=True, blank=True)
 
     def __str__(self):
+        
         return self.username
 
 
@@ -23,19 +22,19 @@ class OTP(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('user', 'otp')
+        unique_together = ("user", "otp")
 
     @staticmethod
     def otp_generator(email, length=6):
         user = User_profile.objects.filter(email=email).first()
         if user is None:
             raise Exception("User doesn’t exist")
-        
+
         for _ in range(3):
             otp = "".join([str(random.randint(0, 9)) for _ in range(length)])
             if not OTP.objects.filter(otp=otp).exists():
                 break
-        
+
         # Delete old OTPs
         OTP.objects.filter(user=user).delete()
 

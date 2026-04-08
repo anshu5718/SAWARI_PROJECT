@@ -9,24 +9,15 @@ function OtpConfirmation() {
   const navigate = useNavigate();
 
   const getCookie = (name) => {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-      const cookies = document.cookie.split(';');
-      for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
-        }
-      }
-    }
-    return cookieValue;
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
   };
 
   const handleChange = (index, value) => {
-    if (!/^\d*$/.test(value)) return; // digits only
+    if (!/^\d*$/.test(value)) return;
     const updated = [...otp];
-    updated[index] = value.slice(-1); // one digit per box
+    updated[index] = value.slice(-1);
     setOtp(updated);
     if (value && index < 5) inputs.current[index + 1]?.focus();
   };
@@ -46,26 +37,17 @@ function OtpConfirmation() {
     e.preventDefault();
   };
 
-  const handleVerify = async (e) => {
-    e.preventDefault();
+  const handleVerify = async () => {
     setError('');
     setLoading(true);
-
-    const otpString = otp.join('');
-
     try {
       const response = await fetch('http://localhost:8000/api/otp-confirmation/', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': getCookie('csrftoken'),
-        },
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
         credentials: 'include',
-        body: JSON.stringify({ otp: otpString }),
+        body: JSON.stringify({ otp: otp.join('') }),
       });
-
       const data = await response.json();
-
       if (data.success) {
         navigate('/set-new-password', { state: { userId: data.user_id } });
       } else {
@@ -73,7 +55,7 @@ function OtpConfirmation() {
         setOtp(['', '', '', '', '', '']);
         inputs.current[0]?.focus();
       }
-    } catch (err) {
+    } catch {
       setError('Something went wrong. Please try again.');
     } finally {
       setLoading(false);
@@ -81,82 +63,45 @@ function OtpConfirmation() {
   };
 
   return (
-    <main
-      className="min-h-screen flex items-center justify-center px-4"
-      style={{
-        background: 'var(--bg-primary)',
-        fontFamily: "'Inter', sans-serif"
-      }}
-    >
+    <main className="min-h-screen flex items-center justify-center px-4 bg-theme-primary"
+      style={{ fontFamily: "'Inter', sans-serif" }}>
       <div className="w-full max-w-sm">
 
-        {/* Logo mark */}
         <div className="flex flex-col items-center mb-10">
-          <div
-            className="w-10 h-10 rounded-xl flex items-center justify-center text-base font-bold text-black mb-4"
-            style={{ background: '#e8c84a', fontFamily: "'Syne', sans-serif" }}
-          >
-            S
-          </div>
-          <h1
-            className="text-2xl font-bold text-[#f0ede8] tracking-tight"
-            style={{ fontFamily: "'Syne', sans-serif" }}
-          >
-            Check your email
-          </h1>
-          <p className="text-sm text-[#555] mt-1 text-center">
+          <h1 className="text-2xl font-bold text-theme-primary tracking-tight"
+            style={{ fontFamily: "'Syne', sans-serif" }}>Check your email</h1>
+          <p className="text-sm text-theme-muted mt-1 text-center">
             Enter the 6-digit code we sent you
           </p>
         </div>
 
-        {/* Form card */}
-        <div className=" border border-[#1e1e1e] rounded-2xl p-7">
-
+        <div className="card-theme rounded-2xl p-7">
           {error && (
-            <div className="mb-5 px-4 py-3 rounded-lg bg-[#1e0e0e] border border-[#3a1a1a] text-[#e05a4a] text-sm">
-              {error}
-            </div>
+            <div className="mb-5 px-4 py-3 rounded-lg bg-error border border-error text-error text-sm">{error}</div>
           )}
-
-          <form onSubmit={handleVerify} className="flex flex-col gap-6">
-
-            {/* 6-box OTP input */}
+          <div className="flex flex-col gap-6">
             <div className="flex gap-2 justify-between" onPaste={handlePaste}>
               {otp.map((digit, i) => (
-                <input
-                  key={i}
-                  ref={(el) => (inputs.current[i] = el)}
-                  type="text"
-                  inputMode="numeric"
-                  maxLength={1}
-                  value={digit}
+                <input key={i} ref={(el) => (inputs.current[i] = el)}
+                  type="text" inputMode="numeric" maxLength={1} value={digit}
                   onChange={(e) => handleChange(i, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(i, e)}
-                  className="w-11 h-12 text-center text-lg font-semibold  border border-[#2a2a2a] rounded-lg text-[#f0ede8] outline-none focus:border-[#e8c84a] transition-colors"
+                  className="w-11 h-12 text-center text-lg font-semibold input-theme !px-0"
                 />
               ))}
             </div>
-
-            <button
-              type="submit"
+            <button type="button" onClick={handleVerify}
               disabled={loading || otp.join('').length < 6}
-              className="w-full py-2.5 rounded-lg text-sm font-medium text-black transition-all hover:opacity-90 disabled:opacity-50"
-              style={{ background: '#e8c84a' }}
-            >
+              className="btn-accent w-full py-2.5 text-sm">
               {loading ? 'Verifying...' : 'Verify code'}
             </button>
-
-          </form>
+          </div>
         </div>
 
-        {/* Footer link */}
-        <p className="text-center text-sm text-[#444] mt-6">
+        <p className="text-center text-sm text-theme-muted mt-6">
           Didn't receive a code?{' '}
-          <Link to="/forgot-password" className="text-[#e8c84a] hover:opacity-80 transition-opacity no-underline">
-            Try again
-          </Link>
+          <Link to="/forgot-password" className="accent hover:opacity-80 transition-opacity no-underline">Try again</Link>
         </p>
-
       </div>
     </main>
   );

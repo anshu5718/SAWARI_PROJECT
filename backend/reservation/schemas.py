@@ -29,9 +29,22 @@ class BookingSchema(BaseModel):
 class ReservationSchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
+    action: str
+    
+
+
+class BookingDetailsSchema(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    
     id: int
-    status: str
+    vehicle: str
+    vehicle_type: str
+    owner: str
+    customer: str
+    pickup_location: str
+    dropoff_location: str
     start_date: date
     end_date: date
-    vehicle_type: str
-    user_email: str
+    status: str
+    amount: str | None = None
+    payment_status: str | None = None

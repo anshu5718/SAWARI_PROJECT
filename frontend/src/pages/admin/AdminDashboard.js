@@ -7,6 +7,7 @@ import { useStatusStyles } from '../../constants/statusStyles';
 function AdminDashboard() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const navigate = useNavigate();
   const { isDark } = useTheme();
   const STATUS_STYLES = useStatusStyles(isDark);
@@ -18,12 +19,25 @@ function AdminDashboard() {
       .finally(() => setLoading(false));
   }, []);
 
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await apiRequest('/refresh-booking/', { method: 'PATCH' });
+      const d = await apiRequest('/admin/dashboard/');
+      setData(d);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   const stats = [
-    { label: 'Total Vehicles', value: data?.total_vehicles ?? '—', icon: '🚗', sub: 'registered' },
-    { label: 'Pending KYC',    value: data?.pending_kyc    ?? '—', icon: '📋', sub: 'awaiting review' },
-    { label: 'Total Bookings', value: data?.total_bookings ?? '—', icon: '📅', sub: 'all time' },
-    { label: 'Customers',      value: data?.total_users    ?? '—', icon: '👤', sub: 'active users' },
-    { label: 'Drivers',        value: data?.total_drivers  ?? '—', icon: '🪪', sub: 'onboarded' },
+    { label: 'Total Vehicles', value: data?.total_vehicles ?? '—', sub: 'registered' },
+    { label: 'Pending KYC',    value: data?.pending_kyc    ?? '—', sub: 'awaiting review' },
+    { label: 'Total Bookings', value: data?.total_bookings ?? '—', sub: 'all time' },
+    { label: 'Customers',      value: data?.total_users    ?? '—', sub: 'active users' },
+    { label: 'Drivers',        value: data?.total_drivers  ?? '—', sub: 'onboarded' },
   ];
 
   const navButtons = [
@@ -62,6 +76,17 @@ function AdminDashboard() {
               {label}
             </button>
           ))}
+
+          <button
+            onClick={handleRefresh}
+            disabled={refreshing}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium
+                       bg-theme-secondary border-theme text-theme-secondary border
+                       hover:border-theme-hover transition-all disabled:opacity-50"
+          >
+            <span className={refreshing ? 'animate-spin' : ''}>🔄</span>
+            {refreshing ? 'Refreshing...' : 'Refresh Bookings'}
+          </button>
         </div>
       </div>
 
@@ -79,7 +104,6 @@ function AdminDashboard() {
                 key={label}
                 className="card-theme rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden"
               >
-                {/* Accent glow — uses CSS var, no hardcoded color */}
                 <div
                   className="absolute -top-4 -right-4 w-16 h-16 rounded-full blur-2xl opacity-20"
                   style={{ background: 'var(--accent)' }}
@@ -104,7 +128,6 @@ function AdminDashboard() {
                   </p>
                 </div>
 
-                {/* Bottom accent bar */}
                 <div
                   className="absolute bottom-0 left-0 h-0.5 w-2/3 opacity-50"
                   style={{ background: 'linear-gradient(to right, var(--accent), transparent)' }}
@@ -115,7 +138,6 @@ function AdminDashboard() {
 
       {/* ── Recent Bookings ── */}
       <div className="card-theme rounded-2xl p-6">
-        {/* Section header */}
         <div className="flex items-center gap-3 mb-6">
           <div className="w-1 h-5 rounded-full bg-accent" />
           <p className="text-xs uppercase tracking-widest font-semibold text-theme-muted">
@@ -137,13 +159,11 @@ function AdminDashboard() {
                 className="flex items-center gap-4 px-4 py-3.5 rounded-xl border border-theme
                            bg-theme-tertiary hover:border-theme-hover transition-all cursor-pointer"
               >
-                {/* ID badge */}
                 <span className="text-xs font-mono font-semibold px-2 py-0.5 rounded-md shrink-0
                                  bg-theme-primary border-theme border text-theme-muted">
                   #{r.id}
                 </span>
 
-                {/* Vehicle + user */}
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium truncate text-theme-primary">{r.vehicle}</p>
                   <p className="text-xs mt-0.5 text-theme-muted">
@@ -151,7 +171,6 @@ function AdminDashboard() {
                   </p>
                 </div>
 
-                {/* Status badge */}
                 <span
                   className="text-xs px-3 py-1 rounded-full capitalize font-medium shrink-0"
                   style={{

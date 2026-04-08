@@ -3,10 +3,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { apiRequest } from '../../api';
 
 const STATUS_STYLES = {
-  available: { bg: '#0a0a1a', border: '#1a1a3a', text: '#7a9ae8', dot: '#3a5ab0' },
-  pending:   { bg: '#1a1400', border: '#3a2a00', text: '#e8c84a', dot: '#a07800' },
-  approved:  { bg: '#0a1400', border: '#2a4a1a', text: '#8bc34a', dot: '#4a8a2a' },
-  completed: { bg: '#141414', border: '#2a2a2a', text: '#555',    dot: '#333'    },
+  available: { bg: 'var(--bg-tertiary)',        border: 'var(--border)',                text: 'var(--text-secondary)' },
+  pending:   { bg: 'var(--status-pending-bg)',  border: 'var(--status-pending-border)', text: 'var(--status-pending-text)' },
+  approved:  { bg: 'var(--status-active-bg)',   border: 'var(--status-active-border)',  text: 'var(--status-active-text)' },
+  completed: { bg: 'var(--bg-tertiary)',         border: 'var(--border)',                text: 'var(--text-secondary)' },
 };
 
 const STATUSES = ['pending', 'approved', 'completed'];
@@ -22,25 +22,17 @@ function BookingStatus() {
 
   useEffect(() => {
     apiRequest(`/booking-status/?reservation_id=${reservationId}`)
-      .then(data => {
-        setReservation(data);
-        setSelected(data.status);
-      })
+      .then(data => { setReservation(data); setSelected(data.status); })
       .catch(err => console.error('Error fetching reservation:', err));
   }, [reservationId]);
 
-  const handleUpdate = async (e) => {
-    e.preventDefault();
-    setError('');
-    setSaved(false);
-    setLoading(true);
-
+  const handleUpdate = async () => {
+    setError(''); setSaved(false); setLoading(true);
     try {
       const result = await apiRequest(`/booking-status/?reservation_id=${reservationId}`, {
         method: 'POST',
         body: JSON.stringify({ action: selected }),
       });
-
       if (result.success) {
         setReservation(prev => ({ ...prev, status: selected }));
         setSaved(true);
@@ -48,7 +40,7 @@ function BookingStatus() {
       } else {
         setError(result.message || 'Update failed. Please try again.');
       }
-    } catch (err) {
+    } catch {
       setError('Something went wrong. Please try again.');
     } finally {
       setLoading(false);
@@ -58,16 +50,12 @@ function BookingStatus() {
   const formatDate = (d) =>
     d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
 
-  // Loading skeleton
   if (!reservation) return (
-    <main
-      className="w-full px-8 py-10 max-w-2xl mx-auto"
-      style={{ fontFamily: "'Inter', sans-serif" }}
-    >
+    <main className="w-full px-8 py-10 max-w-2xl mx-auto" style={{ fontFamily: "'Inter', sans-serif" }}>
       <div className="flex flex-col gap-4 animate-pulse">
-        <div className="h-4 bg-[#1e1e1e] rounded w-24" />
-        <div className="h-8 bg-[#1e1e1e] rounded w-64" />
-        <div className="h-48  border border-[#1e1e1e] rounded-2xl mt-4" />
+        <div className="h-4 bg-theme-tertiary rounded w-24" />
+        <div className="h-8 bg-theme-tertiary rounded w-64" />
+        <div className="h-48 card-theme rounded-2xl mt-4" />
       </div>
     </main>
   );
@@ -75,52 +63,38 @@ function BookingStatus() {
   const style = STATUS_STYLES[reservation.status] || STATUS_STYLES.pending;
 
   return (
-    <main
-      className="w-full px-8 py-10 max-w-2xl mx-auto"
-      style={{ fontFamily: "'Inter', sans-serif" }}
-    >
-      {/* Header */}
+    <main className="w-full px-8 py-10 max-w-2xl mx-auto" style={{ fontFamily: "'Inter', sans-serif" }}>
       <div className="mb-8">
-        <button
-          onClick={() => navigate(-1)}
-          className="flex items-center gap-1.5 text-xs text-[#444] hover:text-[#888] transition-colors mb-4"
-        >
+        <button onClick={() => navigate(-1)}
+          className="flex items-center gap-1.5 text-xs text-theme-muted hover:text-theme-secondary transition-colors mb-4">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M19 12H5M12 5l-7 7 7 7"/>
           </svg>
           Back
         </button>
-        <p className="text-xs uppercase tracking-[0.18em] text-[#444] mb-2">Reservation #{reservationId}</p>
-        <h1
-          className="text-3xl font-bold text-[#f0ede8] tracking-tight"
-          style={{ fontFamily: "'Syne', sans-serif" }}
-        >
-          Booking details
-        </h1>
+        <p className="text-xs uppercase tracking-[0.18em] text-theme-muted mb-2">Reservation #{reservationId}</p>
+        <h1 className="text-3xl font-bold text-theme-primary tracking-tight"
+          style={{ fontFamily: "'Syne', sans-serif" }}>Booking details</h1>
       </div>
 
       {/* Details card */}
-      <div className=" border border-[#1e1e1e] rounded-2xl p-6 mb-4">
+      <div className="card-theme rounded-2xl p-6 mb-4">
         <div className="flex items-start justify-between mb-5">
           <div>
-            <p className="text-xs uppercase tracking-widest text-[#444] mb-1">Vehicle</p>
-            <p
-              className="text-lg font-semibold text-[#f0ede8]"
-              style={{ fontFamily: "'Syne', sans-serif" }}
-            >
+            <p className="text-xs uppercase tracking-widest text-theme-muted mb-1">Vehicle</p>
+            <p className="text-lg font-semibold text-theme-primary"
+              style={{ fontFamily: "'Syne', sans-serif" }}>
               {reservation.vehicle_type || reservation.vehicle_name || '—'}
             </p>
           </div>
-          <span
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium capitalize"
-            style={{ background: style.bg, border: `1px solid ${style.border}`, color: style.text }}
-          >
-            <span className="w-1.5 h-1.5 rounded-full" style={{ background: style.dot }} />
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium capitalize"
+            style={{ background: style.bg, border: `1px solid ${style.border}`, color: style.text }}>
+            <span className="w-1.5 h-1.5 rounded-full" style={{ background: style.text }} />
             {reservation.status}
           </span>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 border-t border-[#1e1e1e] pt-5">
+        <div className="grid grid-cols-2 gap-4 border-t border-theme pt-5">
           {[
             { label: 'Customer', value: reservation.user_name },
             { label: 'Phone',    value: reservation.phone || '—' },
@@ -130,25 +104,23 @@ function BookingStatus() {
             { label: 'Total',    value: reservation.total_cost ? `NPR ${reservation.total_cost}` : '—' },
           ].map(({ label, value }) => (
             <div key={label}>
-              <p className="text-xs uppercase tracking-widest text-[#444] mb-0.5">{label}</p>
-              <p className="text-sm text-[#f0ede8] capitalize">{value}</p>
+              <p className="text-xs uppercase tracking-widest text-theme-muted mb-0.5">{label}</p>
+              <p className="text-sm text-theme-primary capitalize">{value}</p>
             </div>
           ))}
         </div>
       </div>
 
       {/* Update status card */}
-      <div className=" border border-[#1e1e1e] rounded-2xl p-6">
-        <p className="text-xs uppercase tracking-widest text-[#444] mb-4">Update status</p>
+      <div className="card-theme rounded-2xl p-6">
+        <p className="text-xs uppercase tracking-widest text-theme-muted mb-4">Update status</p>
 
         {error && (
-          <div className="mb-4 px-4 py-3 rounded-lg bg-[#1e0e0e] border border-[#3a1a1a] text-[#e05a4a] text-sm">
-            {error}
-          </div>
+          <div className="mb-4 px-4 py-3 rounded-lg bg-error border border-error text-error text-sm">{error}</div>
         )}
-
         {saved && (
-          <div className="mb-4 px-4 py-3 rounded-lg bg-[#0a1400] border border-[#2a4a1a] text-[#8bc34a] text-sm flex items-center gap-2">
+          <div className="mb-4 px-4 py-3 rounded-lg text-sm flex items-center gap-2"
+            style={{ background: 'var(--status-active-bg)', border: '1px solid var(--status-active-border)', color: 'var(--status-active-text)' }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <path d="M20 6L9 17l-5-5"/>
             </svg>
@@ -156,22 +128,18 @@ function BookingStatus() {
           </div>
         )}
 
-        <form onSubmit={handleUpdate} className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4">
           <div className="flex gap-2 flex-wrap">
             {STATUSES.map((s) => {
               const st = STATUS_STYLES[s];
               return (
-                <button
-                  key={s}
-                  type="button"
-                  onClick={() => setSelected(s)}
+                <button key={s} type="button" onClick={() => setSelected(s)}
                   className="px-4 py-2 rounded-lg text-sm font-medium capitalize transition-all border"
                   style={{
-                    background: selected === s ? st.bg : '#0f0f0f',
-                    borderColor: selected === s ? st.border : '#2a2a2a',
-                    color: selected === s ? st.text : '#555',
-                  }}
-                >
+                    background: selected === s ? st.bg : 'var(--bg-primary)',
+                    borderColor: selected === s ? st.border : 'var(--border-hover)',
+                    color: selected === s ? st.text : 'var(--text-muted)',
+                  }}>
                   {s}
                 </button>
               );
@@ -179,26 +147,21 @@ function BookingStatus() {
           </div>
 
           <div className="flex gap-2">
-            <button
-              type="submit"
+            <button type="button" onClick={handleUpdate}
               disabled={loading || selected === reservation.status}
-              className="px-6 py-2.5 rounded-lg text-sm font-medium text-black transition-all hover:opacity-90 disabled:opacity-50"
-              style={{ background: '#e8c84a' }}
-            >
+              className="btn-accent px-6 py-2.5 text-sm disabled:opacity-50">
               {loading ? 'Updating...' : 'Save changes'}
             </button>
-
-            <button
-              type="button"
-              onClick={() => navigate(`/reject-booking`)}
-              className="px-6 py-2.5 rounded-lg text-sm text-[#e05a4a] border border-[#3a1a1a] hover:bg-[#1e0e0e] transition-all"
-            >
+            <button type="button" onClick={() => navigate(`/reject-booking`)}
+              className="px-6 py-2.5 rounded-lg text-sm transition-all"
+              style={{ color: 'var(--error-text)', border: '1px solid var(--error-border)' }}
+              onMouseEnter={e => e.currentTarget.style.background = 'var(--error-bg)'}
+              onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
               Reject booking
             </button>
           </div>
-        </form>
+        </div>
       </div>
-
     </main>
   );
 }

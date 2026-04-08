@@ -12,6 +12,7 @@ class Vehicle(models.Model):
     is_active = models.BooleanField(default=False) 
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='vehicles')
     cost_per_day = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    is_booked = models.BooleanField(default=False)
 
     # KYC fields
     citizenship_number = models.CharField(max_length=50)

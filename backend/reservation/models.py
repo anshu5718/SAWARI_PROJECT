@@ -12,6 +12,7 @@ class Reservation(models.Model):
         ("pending", "pending"),
         ("approved", "approved"),
         ("completed", "completed"),
+        ("finished", "finished"),
     ]
 
     vehicle = models.ForeignKey(

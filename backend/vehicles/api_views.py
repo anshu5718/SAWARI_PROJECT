@@ -68,6 +68,7 @@ def driver_homepage_api(request):
             "license_number": v.license_number,
             "kyc_approved": v.kyc_approved,
             "current_status": v.current_status,
+            "is_booked": v.is_booked,
         })
     return result
 
@@ -107,7 +108,7 @@ def update_vehicle_image_api(request, vehicle_id: int):
 @api.delete("/delete-vehicle/{vehicle_id}/", auth=django_auth)
 def delete_vehicle_api(request, vehicle_id: int):
     vehicle = get_object_or_404(Vehicle, id=vehicle_id, owner=request.user)
-    if vehicle.current_status == 'available':
-        vehicle.delete()
-        return {"success": True, "message": "Vehicle deleted successfully."}
-    return {"success": False, "message": "Vehicle is already booked."}
+    if vehicle.is_booked:                          
+        return {"success": False, "message": "Cannot delete a currently booked vehicle."}
+    vehicle.delete()
+    return {"success": True, "message": "Vehicle deleted successfully."}

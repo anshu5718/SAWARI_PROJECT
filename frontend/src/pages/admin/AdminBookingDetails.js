@@ -52,27 +52,24 @@ function AdminBookingDetails() {
     );
   }
 
-  const userName = typeof reservation.user === 'object' ? reservation.user.username : reservation.user;
-  const vehicleName = typeof reservation.vehicle === 'object' ? reservation.vehicle.name : reservation.vehicle;
-
-  const statusStyle =
-    STATUS_STYLES[reservation.status] || STATUS_STYLES.pending;
+  const userName = reservation.user;
+  const vehicleName = reservation.vehicle;
 
   return (
-    <main className="min-h-screen px-6 md:px-10 py-10 max-w-4xl mx-auto" style={{ fontFamily: "'Inter', sans-serif" }}>
-
-      <button onClick={() => navigate('/admin/bookings')} className="flex items-center gap-2 text-xs text-theme-muted hover:text-theme-secondary transition-colors mb-8">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    <main
+      className="min-h-screen px-6 md:px-10 py-10 max-w-4xl mx-auto"
+      style={{ fontFamily: "'Inter', sans-serif" }}
+    >
+      <button
+        onClick={() => navigate('/admin/bookings')}
+        className="flex items-center gap-2 text-xs text-theme-muted hover:text-theme-secondary transition-colors mb-8"
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M19 12H5M12 5l-7 7 7 7" />
+        </svg>
         Back to Bookings
       </button>
 
-      <div className="mb-8">
-        <p className="text-xs uppercase tracking-[0.2em] mb-1.5 accent">Admin</p>
-        <h1 className="text-4xl font-bold text-theme-primary tracking-tight" style={{ fontFamily: "'Syne', sans-serif" }}>
-          Booking #{reservation.id}
-        </h1>
-        <p className="text-sm text-theme-muted mt-1">{userName || 'Unknown User'} · {vehicleName}</p>
-      </div>
       {/* Header */}
       <div
         className="rounded-2xl p-6 mb-6 flex items-center justify-between flex-wrap gap-4"
@@ -92,43 +89,28 @@ function AdminBookingDetails() {
             Booking #{reservation.id}
           </h1>
           <p className="text-xs text-theme-muted mt-1">
-            {userName || 'Unknown User'} · {vehicleName}
+            {userName} · {vehicleName}
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          {/* Booking Status */}
-          <span
-            className="text-xs px-3 py-1.5 rounded-full font-semibold capitalize"
-            style={{
-              background: statusStyle.bg,
-              border: `1px solid ${statusStyle.border}`,
-              color: statusStyle.text,
-            }}
-          >
-            {reservation.status}
-          </span>
-
-          {/* Payment Status */}
-          <span
-            className="text-xs px-3 py-1.5 rounded-full font-semibold capitalize"
-            style={
-              reservation.payment_status === 'paid'
-                ? {
-                    background: 'var(--status-active-bg)',
-                    border: '1px solid var(--status-active-border)',
-                    color: 'var(--status-active-text)',
-                  }
-                : {
-                    background: 'var(--status-pending-bg)',
-                    border: '1px solid var(--status-pending-border)',
-                    color: 'var(--status-pending-text)',
-                  }
-            }
-          >
-            {reservation.payment_status}
-          </span>
-        </div>
+        <span
+          className="text-xs px-3 py-1.5 rounded-full font-semibold capitalize"
+          style={
+            reservation.payment_status === 'paid'
+              ? {
+                  background: 'var(--status-active-bg)',
+                  border: '1px solid var(--status-active-border)',
+                  color: 'var(--status-active-text)',
+                }
+              : {
+                  background: 'var(--status-pending-bg)',
+                  border: '1px solid var(--status-pending-border)',
+                  color: 'var(--status-pending-text)',
+                }
+          }
+        >
+          {reservation.payment_status}
+        </span>
       </div>
 
       {/* Booking Info */}
@@ -139,29 +121,25 @@ function AdminBookingDetails() {
           border: '1px solid var(--border)',
         }}
       >
-        <div className="flex items-center gap-3 mb-5">
-          <div
-            className="w-1 h-5 rounded-full"
-            style={{ background: 'var(--accent)' }}
-          />
-          <p className="text-xs uppercase tracking-widest font-semibold text-theme-muted">
-            Booking Details
-          </p>
-        </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {[
             { label: 'Booking ID', value: `#${reservation.id}` },
-            { label: 'User', value: userName || 'Unknown User' },
+            { label: 'Status', value: reservation.status },
             { label: 'Vehicle', value: vehicleName },
-            { label: 'Start Date', value: formatDate(reservation.start_date) },
-            { label: 'End Date', value: formatDate(reservation.end_date) },
-            { label: 'Pickup Location', value: reservation.pickup_location },
-            { label: 'Dropoff Location', value: reservation.dropoff_location },
             {
               label: 'Amount',
               value: reservation.amount ? `NPR ${reservation.amount}` : '—',
             },
+            { label: 'Owner', value: reservation.owner },
+            { label: 'Owner Phone Number', value: reservation.owner_phone_number || 'N/A' },
+
+            { label: 'User', value: reservation.user },
+            { label: 'User Phone Number', value: reservation.customer_phone_number || 'N/A' },
+
+            { label: 'Start Date', value: formatDate(reservation.start_date) },
+            { label: 'End Date', value: formatDate(reservation.end_date) },
+            { label: 'Pickup Location', value: reservation.pickup_location },
+            { label: 'Dropoff Location', value: reservation.dropoff_location },
           ].map(({ label, value }) => (
             <div
               key={label}

@@ -1,4 +1,6 @@
 # admin_panel/api_views.py
+from datetime import date
+
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from ninja.security import django_auth
@@ -75,6 +77,7 @@ def admin_vehicles_api(request):
                 if v.vehicle_image
                 else None
             ),
+            is_booked=v.is_booked,
         ).model_dump()
         for v in vehicles
     ]
@@ -193,11 +196,14 @@ def admin_user_detail_api(request, user_id: int):
         bookings = [
             BookingDetailSchema(
                 id=b.id,
+                user=b.user.username,
+                phone_number=b.user.phone_number or "—",
                 vehicle=b.vehicle.name,
                 status=b.status,
                 start_date=str(b.start_date),
                 end_date=str(b.end_date),
                 amount=str(b.amount) if b.amount else None,
+                payment_status=b.payment_status,
                 pickup_location=b.pickup_location or "—",
                 dropoff_location=b.dropoff_location or "—",
             ).model_dump()
@@ -234,6 +240,7 @@ def admin_user_detail_api(request, user_id: int):
         id=user.id,
         username=user.username,
         email=user.email,
+        phone_number=user.phone_number or "—",
         first_name=user.first_name,
         last_name=user.last_name,
         user_type=user.user_type,
@@ -260,6 +267,7 @@ def admin_bookings_api(request):
         AdminBookingSchema(
             id=r.id,
             vehicle=r.vehicle.name,
+            owner=r.vehicle.owner.username,
             user=r.user.username,
             status=r.status,
             payment_status=r.payment_status,
@@ -279,7 +287,10 @@ def admin_booking_detail_api(request, booking_id: int):
     booking_data = BookingDetailSchema(
         id=booking.id,
         vehicle=booking.vehicle.name,
+        owner=booking.vehicle.owner.username,
+        owner_phone_number=booking.vehicle.owner.phone_number or "—",
         user=booking.user.username,
+        customer_phone_number=booking.user.phone_number or "—",
         status=booking.status,
         payment_status=booking.payment_status,
         start_date=str(booking.start_date),
@@ -289,3 +300,25 @@ def admin_booking_detail_api(request, booking_id: int):
         dropoff_location=booking.dropoff_location or "—",
     )
     return booking_data.model_dump()
+
+
+
+@api.patch("/refresh-booking/", auth=django_auth)
+def refresh_bookings_api(request):
+    if not is_admin(request):
+        return {"success": False, "message": "Unauthorized"}
+
+    now = timezone.now().date()
+
+    expired = Reservation.objects.filter(
+        end_date__lt=now,
+        status__in=["pending", "approved"]  # only close active ones
+    )
+
+    vehicle_ids = list(expired.values_list("vehicle_id", flat=True))
+
+    expired.update(status="completed")
+
+    Vehicle.objects.filter(id__in=vehicle_ids).update(is_booked=False)
+
+    return {"success": True, "message": f"{len(vehicle_ids)} bookings completed and vehicles freed."}

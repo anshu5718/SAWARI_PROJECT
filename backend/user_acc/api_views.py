@@ -20,6 +20,7 @@ from user_acc.schemas import (
     SignupPayload,
     OTPSchema,
     PasswordResetSchema,
+    UpdateUserPayload,
     VehicleOut,
 )
 from user_acc.utilis import forgot_password_email
@@ -35,10 +36,6 @@ def get_csrf_token(request):
 
 @api.post("/login/")
 def login_api(request, data: LoginPayload = Body(...)):
-    print("BODY:", request.body)
-    print("GET:", request.GET)
-    print("POST:", request.POST)
-    print("CONTENT TYPE:", request.content_type)
     user = authenticate(request, username=data.username, password=data.password)
     if user is not None:
         login(request, user)
@@ -52,8 +49,9 @@ def login_api(request, data: LoginPayload = Body(...)):
             "redirect_url": redirect_url,
             "user": {
                 "username": user.username,
-                "full_name": f"{user.first_name} {user.last_name}".strip() or user.username,
                 "user_type": user.user_type,
+                "email": user.email,
+                "phone_number": user.phone_number,
             },
         }
     return {"success": False, "message": "Invalid username or password"}
@@ -67,13 +65,14 @@ def logout_api(request):
 
 @api.post("/signup/")
 def signup_api(request, data: SignupPayload = Body(...)):
-    user_data = data.model_dump()
-    raw_password = user_data.pop("password")
+    user_dict = data.model_dump()
+    raw_password = user_dict.pop("password")
+    phone = user_dict.get("phone_number")
 
-    if User_profile.objects.filter(username=user_data["username"]).exists():
-        return {"success": False, "message": "Username already exists"}
+    if User_profile.objects.filter(phone_number=phone).exists():
+        return {"success": False, "message": "Account with this phone number already exists"}
 
-    User_profile.objects.create(**user_data, password=make_password(raw_password))
+    User_profile.objects.create(**user_dict, password=make_password(raw_password))
     return {"success": True, "message": "Account created successfully"}
 
 
@@ -117,6 +116,7 @@ def viewer_homepage_api(request):
         result.append({
             "id": v.id,
             "name": v.name,
+            "owner": v.owner.username,
             "vehicle_type": v.vehicle_type,
             "vehicle_image": request.build_absolute_uri(v.vehicle_image.url) if v.vehicle_image else None,
             "capacity": v.capacity,
@@ -127,6 +127,7 @@ def viewer_homepage_api(request):
             "license_number": v.license_number,
             "kyc_approved": v.kyc_approved,
             "current_status": v.current_status,
+            "is_booked": v.is_booked,
         })
     return result
 
@@ -156,3 +157,21 @@ def booking_cancel_api(request, reservation_id: int):
         return {"success": True, "message": "Booking cancelled successfully."}
 
     return {"success": False, "message": "You cannot cancel this booking."}
+
+@api.put("/update-user/", auth=django_auth)
+def update_user_api(request, data: UpdateUserPayload = Body(...)):
+    user = request.user
+    if data.phone_number is not None:
+        user.phone_number = data.phone_number
+    if data.username is not None:
+        user.username = data.username
+    user.save()
+
+    return {
+        "id": user.id,
+        "full_name": user.username,
+        "email": user.email,
+        "phone": user.phone_number,
+    }
+    
+

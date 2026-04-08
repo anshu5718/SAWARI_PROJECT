@@ -20,21 +20,20 @@ function EditVehicle() {
     vehicle_image: null,
   });
 
-    useEffect(() => {
+  useEffect(() => {
     apiRequest(`/edit-vehicle/${id}/`)
-        .then(data => {
-        console.log('Edit vehicle data:', data); // add this
+      .then(data => {
         setFormData({
-            name: data.name || '',
-            description: data.description || '',
-            cost_per_day: data.cost_per_day || '',
-            vehicle_image: null,
+          name: data.name || '',
+          description: data.description || '',
+          cost_per_day: data.cost_per_day || '',
+          vehicle_image: null,
         });
         if (data.vehicle_image) setImagePreview(data.vehicle_image);
-        })
-        .catch(() => setError('Failed to load vehicle details.'))
-        .finally(() => setLoading(false));
-    }, [id]);
+      })
+      .catch(() => setError('Failed to load vehicle details.'))
+      .finally(() => setLoading(false));
+  }, [id]);
 
   const handleChange = (e) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -52,66 +51,51 @@ function EditVehicle() {
     e.preventDefault();
     setError('');
     setSubmitting(true);
-
     try {
-        // Step 1 — update text fields via JSON
-        const response = await fetch(`http://localhost:8000/api/edit-vehicle/${id}/`, {
+      const response = await fetch(`http://localhost:8000/api/edit-vehicle/${id}/`, {
         method: 'PATCH',
         credentials: 'include',
         headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken'),
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken'),
         },
         body: JSON.stringify({
-            name: formData.name,
-            description: formData.description,
-            cost_per_day: parseFloat(formData.cost_per_day),
+          name: formData.name,
+          description: formData.description,
+          cost_per_day: parseFloat(formData.cost_per_day),
         }),
-        });
-
-        const result = await response.json();
-        if (!result.success) {
+      });
+      const result = await response.json();
+      if (!result.success) {
         setError(result.message || 'Update failed. Please try again.');
         return;
-        }
-
-        // Step 2 — upload image separately if changed
-        if (formData.vehicle_image) {
-            console.log('Uploading image:', formData.vehicle_image); // add this
-            const form = new FormData();
-            form.append('vehicle_image', formData.vehicle_image);
-            console.log('FormData entries:'); // add this
-            for (let pair of form.entries()) {  // add this
-                console.log(pair[0], pair[1]);    // add this
-            }
-            const imgResponse = await fetch(`http://localhost:8000/api/edit-vehicle-image/${id}/`, {
-                method: 'POST',
-                credentials: 'include',
-                headers: { 'X-CSRFToken': getCookie('csrftoken') },
-                body: form,
-            });
-            const imgResult = await imgResponse.json();
-            console.log('Image update result:', imgResult);
-            }
-
-        setSuccess(true);
-        setTimeout(() => navigate('/driver-homepage', { state: { refresh: true } }), 2000);
-
+      }
+      if (formData.vehicle_image) {
+        const form = new FormData();
+        form.append('vehicle_image', formData.vehicle_image);
+        await fetch(`http://localhost:8000/api/edit-vehicle-image/${id}/`, {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'X-CSRFToken': getCookie('csrftoken') },
+          body: form,
+        });
+      }
+      setSuccess(true);
+      setTimeout(() => navigate('/driver-homepage', { state: { refresh: true } }), 2000);
     } catch {
-        setError('Something went wrong. Please try again.');
+      setError('Something went wrong. Please try again.');
     } finally {
-        setSubmitting(false);
+      setSubmitting(false);
     }
-    };
-  const inputClass = 'w-full  border border-[#2a2a2a] rounded-lg px-4 py-2.5 text-sm text-[#f0ede8] placeholder-[#333] outline-none focus:border-[#e8c84a] transition-colors';
-  const labelClass = 'text-xs uppercase tracking-widest text-[#555]';
+  };
 
   if (loading) {
     return (
-      <div className="min-h-screen  flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-8 h-8 border-2 border-[#e8c84a] border-t-transparent rounded-full animate-spin" />
-          <p className="text-sm text-[#444]">Loading vehicle...</p>
+          <div className="w-8 h-8 border-2 border-t-transparent rounded-full animate-spin"
+            style={{ borderColor: 'var(--accent)', borderTopColor: 'transparent' }} />
+          <p className="text-sm text-theme-muted">Loading vehicle...</p>
         </div>
       </div>
     );
@@ -119,31 +103,35 @@ function EditVehicle() {
 
   if (success) {
     return (
-      <div className="min-h-screen  flex items-center justify-center px-4">
+      <div className="min-h-screen flex items-center justify-center px-4">
         <div className="flex flex-col items-center gap-4 text-center">
           <div
-            className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl"
-            style={{ background: '#0a1400', border: '1px solid #2a4a1a' }}
+            className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-bold"
+            style={{
+              background: 'color-mix(in srgb, var(--accent) 15%, transparent)',
+              border: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)',
+              color: 'var(--accent)',
+            }}
           >
             ✓
           </div>
-          <h2 className="text-xl font-bold text-[#f0ede8]" style={{ fontFamily: "'Syne', sans-serif" }}>
+          <h2 className="text-xl font-bold text-theme-primary" style={{ fontFamily: "'Syne', sans-serif" }}>
             Vehicle updated!
           </h2>
-          <p className="text-sm text-[#555]">Redirecting to your dashboard...</p>
+          <p className="text-sm text-theme-muted">Redirecting to your dashboard...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <main className="min-h-screen  px-4 py-12" style={{ fontFamily: "'Inter', sans-serif" }}>
+    <main className="min-h-screen px-4 py-12" style={{ fontFamily: "'Inter', sans-serif" }}>
       <div className="max-w-xl mx-auto">
 
-        {/* Back button */}
+        {/* Back */}
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-xs text-[#444] hover:text-[#888] transition-colors mb-8"
+          className="flex items-center gap-2 text-xs text-theme-muted hover:text-theme-primary transition-colors mb-8"
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M19 12H5M12 5l-7 7 7 7"/>
@@ -153,29 +141,48 @@ function EditVehicle() {
 
         {/* Header */}
         <div className="mb-8">
-          <p className="text-xs uppercase tracking-[0.18em] text-[#444] mb-2">Driver</p>
-          <h1 className="text-2xl font-bold text-[#f0ede8] tracking-tight" style={{ fontFamily: "'Syne', sans-serif" }}>
+          <span
+            className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.18em] px-3 py-1 rounded-full mb-3"
+            style={{
+              background: 'color-mix(in srgb, var(--accent) 15%, transparent)',
+              color: 'var(--accent)',
+              border: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)',
+            }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--accent)' }} />
+            Driver
+          </span>
+          <h1 className="text-3xl font-bold text-theme-primary tracking-tight" style={{ fontFamily: "'Syne', sans-serif" }}>
             Edit vehicle
           </h1>
         </div>
 
         {error && (
-          <div className="mb-6 px-4 py-3 rounded-lg bg-[#1e0e0e] border border-[#3a1a1a] text-[#e05a4a] text-sm">
+          <div
+            className="mb-6 px-4 py-3 rounded-xl text-sm"
+            style={{
+              background: 'color-mix(in srgb, #e05a4a 10%, transparent)',
+              border: '1px solid color-mix(in srgb, #e05a4a 30%, transparent)',
+              color: '#e05a4a',
+            }}
+          >
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
 
           {/* Image upload */}
-          <div className=" border border-[#1e1e1e] rounded-2xl overflow-hidden">
+          <div className="card-theme rounded-2xl overflow-hidden">
             {imagePreview ? (
               <div className="relative">
                 <img src={imagePreview} alt="Vehicle" className="w-full h-48 object-cover" />
                 <label
                   htmlFor="vehicle_image"
-                  className="absolute bottom-3 right-3 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium cursor-pointer transition-all hover:opacity-100 opacity-90"
-                  style={{ background: 'rgba(20,20,20,0.85)', border: '1px solid #2a2a2a', color: '#888', backdropFilter: 'blur(4px)' }}
+                  className="absolute bottom-3 right-3 flex items-center gap-1.5 px-3 py-1.5 rounded-lg
+                             text-xs font-medium cursor-pointer bg-theme-secondary border-theme border
+                             text-theme-muted hover:text-theme-primary transition-all"
+                  style={{ backdropFilter: 'blur(4px)' }}
                 >
                   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
@@ -187,66 +194,77 @@ function EditVehicle() {
             ) : (
               <label
                 htmlFor="vehicle_image"
-                className="w-full h-48 flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-[#1a1a1a] transition-colors"
+                className="w-full h-48 flex flex-col items-center justify-center gap-2 cursor-pointer
+                           bg-theme-secondary hover:bg-theme-tertiary transition-colors"
               >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#333" strokeWidth="1.5">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-theme-muted">
                   <rect x="3" y="3" width="18" height="18" rx="2"/>
                   <circle cx="8.5" cy="8.5" r="1.5"/>
                   <path d="M21 15l-5-5L5 21"/>
                 </svg>
-                <p className="text-xs text-[#444]">Click to upload photo</p>
+                <p className="text-xs text-theme-muted">Click to upload photo</p>
               </label>
             )}
-            <input
-              id="vehicle_image"
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="hidden"
-            />
+            <input id="vehicle_image" type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
           </div>
 
-          {/* Editable fields */}
-          <div className=" border border-[#1e1e1e] rounded-2xl p-6 flex flex-col gap-5">
-            <p className="text-xs uppercase tracking-widest text-[#444]">Vehicle details</p>
-
-            <div className="flex flex-col gap-1.5">
-              <label className={labelClass}>Vehicle name</label>
-              <input
-                type="text" name="name" value={formData.name}
-                onChange={handleChange} placeholder="e.g. Kathmandu Explorer"
-                required className={inputClass}
-              />
+          {/* Fields */}
+          <div className="card-theme rounded-2xl p-6 flex flex-col gap-5">
+            <div className="flex items-center gap-3">
+              <div className="w-1 h-5 rounded-full" style={{ background: 'var(--accent)' }} />
+              <p className="text-xs uppercase tracking-widest font-semibold text-theme-muted">Vehicle details</p>
             </div>
 
+            {[
+              { label: 'Vehicle name', name: 'name', type: 'text', placeholder: 'e.g. Kathmandu Explorer' },
+            ].map(({ label, name, type, placeholder }) => (
+              <div key={name} className="flex flex-col gap-1.5">
+                <label className="text-xs uppercase tracking-widest text-theme-muted">{label}</label>
+                <input
+                  type={type} name={name} value={formData[name]}
+                  onChange={handleChange} placeholder={placeholder} required
+                  className="w-full bg-theme-secondary border-theme border rounded-xl px-4 py-2.5
+                             text-sm text-theme-primary placeholder-theme-muted outline-none
+                             focus:border-theme-hover transition-colors"
+                />
+              </div>
+            ))}
+
             <div className="flex flex-col gap-1.5">
-              <label className={labelClass}>Description</label>
+              <label className="text-xs uppercase tracking-widest text-theme-muted">Description</label>
               <textarea
                 name="description" value={formData.description}
                 onChange={handleChange} rows={3}
                 placeholder="Describe your vehicle..."
-                className={`${inputClass} resize-none`}
+                className="w-full bg-theme-secondary border-theme border rounded-xl px-4 py-2.5
+                           text-sm text-theme-primary placeholder-theme-muted outline-none
+                           focus:border-theme-hover transition-colors resize-none"
               />
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className={labelClass}>Cost per day (NPR)</label>
+              <label className="text-xs uppercase tracking-widest text-theme-muted">Cost per day (NPR)</label>
               <input
                 type="number" name="cost_per_day" value={formData.cost_per_day}
-                onChange={handleChange} placeholder="e.g. 5000"
-                min="0" required className={inputClass}
+                onChange={handleChange} placeholder="e.g. 5000" min="0" required
+                className="w-full bg-theme-secondary border-theme border rounded-xl px-4 py-2.5
+                           text-sm text-theme-primary placeholder-theme-muted outline-none
+                           focus:border-theme-hover transition-colors"
               />
             </div>
           </div>
 
           <button
             type="submit" disabled={submitting}
-            className="w-full py-3 rounded-xl text-sm font-medium text-black transition-all hover:opacity-90 disabled:opacity-50"
-            style={{ background: '#e8c84a' }}
+            className="w-full py-3 rounded-xl text-sm font-semibold transition-all hover:opacity-90 disabled:opacity-50"
+            style={{
+              background: 'var(--accent)',
+              color: '#000',
+              boxShadow: '0 2px 12px color-mix(in srgb, var(--accent) 40%, transparent)',
+            }}
           >
             {submitting ? 'Saving...' : 'Save changes'}
           </button>
-
         </form>
       </div>
     </main>

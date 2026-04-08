@@ -116,8 +116,9 @@ function AdminBookings() {
             style={{ background: 'var(--bg-tertiary)', borderBottom: '1px solid var(--border)' }}
           >
             <span className="col-span-1">#</span>
-            <span className="col-span-4">Vehicle</span>
-            <span className="col-span-3">Customer</span>
+            <span className="col-span-3">Vehicle</span>
+            <span className="col-span-2">Owner</span>
+            <span className="col-span-2">Customer</span>
             <span className="col-span-2">Dates</span>
             <span className="col-span-1 text-center">Status</span>
             <span className="col-span-1 text-right">Payment</span>
@@ -143,7 +144,7 @@ function AdminBookings() {
                 >
                   {/* ID */}
                   <span
-                    className="col-span-1 text-xs font-mono font-semibold px-2 py-0.5 rounded-md w-fit"
+                    className="col-span-0.5 text-xs font-mono font-semibold px-2 py-0.5 rounded-md w-fit"
                     style={{
                       background: 'var(--bg-primary)',
                       border: '1px solid var(--border)',
@@ -154,12 +155,23 @@ function AdminBookings() {
                   </span>
 
                   {/* Vehicle */}
-                  <div className="col-span-4 min-w-0 pr-4">
+                  <div className="col-span-3 min-w-0 pr-2">
                     <p className="text-sm font-medium text-theme-primary truncate">{b.vehicle}</p>
                   </div>
 
+                  {/* Owner */}
+                  <div className="col-span-2 flex items-center gap-2">
+                    <div
+                      className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0"
+                      style={{ background: 'var(--accent)', color: '#000' }}
+                    >
+                      {b.owner?.[0]?.toUpperCase()}
+                    </div>
+                    <span className="text-xs text-theme-secondary truncate">{b.owner}</span>
+                  </div>
+
                   {/* Customer */}
-                  <div className="col-span-3 flex items-center gap-2">
+                  <div className="col-span-2 flex items-center gap-2">
                     <div
                       className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0"
                       style={{ background: 'var(--accent)', color: '#000' }}
