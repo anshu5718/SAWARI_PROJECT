@@ -70,7 +70,7 @@ def signup_api(request, data: SignupPayload = Body(...)):
     phone = user_dict.get("phone_number")
 
     if User_profile.objects.filter(phone_number=phone).exists():
-        return {"success": False, "message": "Account with this phone number already exists"}
+        return {"success": False, "message": "Phone number already exists"}
 
     User_profile.objects.create(**user_dict, password=make_password(raw_password))
     return {"success": True, "message": "Account created successfully"}

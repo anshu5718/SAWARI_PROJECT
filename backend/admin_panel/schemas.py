@@ -4,7 +4,6 @@ from ninja import Schema
 from pydantic.v1 import ConfigDict
 
 
-# ── Dashboard ─────────────────────────────────────────────────────────
 class RecentBookingSchema(Schema):
     id: int
     vehicle: str
@@ -23,7 +22,6 @@ class DashboardSchema(Schema):
     recent_bookings: list[RecentBookingSchema]
 
 
-# ── Vehicle ───────────────────────────────────────────────────────────
 class AdminVehicleSchema(Schema):
     id: int
     name: str
@@ -56,7 +54,6 @@ class AdminVehicleDetailSchema(Schema):
     vehicle_image: Optional[str] = None
 
 
-# ── User ──────────────────────────────────────────────────────────────
 class AdminUserSchema(Schema):
     id: int
     username: str
@@ -79,7 +76,6 @@ class AdminUserDetailSchema(Schema):
     last_login: str
 
 
-# ── Booking ───────────────────────────────────────────────────────────
 class AdminBookingSchema(Schema):
     model_config = ConfigDict(from_attributes=True)
     id: int
